@@ -143,7 +143,7 @@ export default function Experience() {
           transition={{ duration: 0.6 }}
           className="mt-16 text-center max-w-3xl mx-auto"
         >
-          <blockquote className="font-serif text-xl md:text-2xl italic leading-relaxed">
+          <blockquote className="font-serif text-xl md:text-2xl italic leading-relaxed" data-testid="text-experience-quote">
             "Each role, each challenge, each pivot — they're all measures in the same composition.
             The melody continues, always building, always improvising toward something new."
           </blockquote>
