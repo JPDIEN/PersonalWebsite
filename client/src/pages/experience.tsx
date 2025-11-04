@@ -52,7 +52,7 @@ export default function Experience() {
             The Score
           </h1>
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-            A timeline of milestones, measures, and movements — each note building toward the next crescendo.
+            a timeline of experiences, moments, and lessons — each informing who i am and who i want to be.
           </p>
         </motion.div>
 
@@ -66,7 +66,7 @@ export default function Experience() {
             />
           </div>
           <p className="text-xs text-muted-foreground text-center mt-2">
-            Scroll horizontally to explore the journey
+            scroll horizontally to explore the journey
           </p>
         </div>
 
@@ -144,8 +144,8 @@ export default function Experience() {
           className="mt-16 text-center max-w-3xl mx-auto"
         >
           <blockquote className="font-serif text-xl md:text-2xl italic leading-relaxed" data-testid="text-experience-quote">
-            "Each role, each challenge, each pivot — they're all measures in the same composition.
-            The melody continues, always building, always improvising toward something new."
+            "every role and challenge has built on the last. each one’s taught me something new, 
+            pushed me to adapt, and shaped how I think about what comes next."
           </blockquote>
         </motion.div>
       </div>

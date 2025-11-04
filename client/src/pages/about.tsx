@@ -7,22 +7,22 @@ const themes = [
   {
     key: "C",
     musicalKey: "C Major",
-    title: "Notre Dame Journey",
-    content: "At the University of Notre Dame, I discovered the intersection of rigorous analytical thinking and creative problem-solving. Studying Economics and Applied Computational Mathematics taught me that the most elegant solutions often emerge from combining disparate disciplines — much like a musical composition weaving together distinct melodic lines into a harmonious whole. The golden dome became my lighthouse, reminding me that excellence isn't about perfection, but about continuous growth and intellectual curiosity.",
+    title: "notre dame journey",
+    content: "i came to notre dame thinking growth meant having a plan. turns out it’s mostly about winging it with people who make you laugh when things fall apart. i’ve learned more from shared failures, late-night ideas that didn’t quite work, and saying yes too fast than from any class i’ve taken.",
     color: "from-amber-500/20 to-orange-500/20",
   },
   {
     key: "G",
     musicalKey: "G Minor",
-    title: "Startup Lessons",
-    content: "Working at Yelo and coaching founders at a stealth fund has taught me that startups are jazz ensembles — everyone improvising together toward a shared vision. As Growth & GTM Lead, I've learned that the best strategies embrace uncertainty rather than fear it. Each pivot is a key change, each experiment a new variation on a theme. The minor key reminds us that challenges aren't obstacles; they're the tension that makes resolution so sweet. Growth isn't linear — it's a crescendo built from countless small moments of learning, iteration, and bold decision-making.",
+    title: "startup lessons",
+    content: "i’ve learned more from startups than i probably should admit. coaching founders means watching cool, driven people chase crazy ideas — and getting to help them tweak, test, and try again. at yelo, i worked on gem and growth, failed fast, learned faster, and realized that most “overnight successes” are built on a pile of good mistakes.",
     color: "from-blue-500/20 to-indigo-500/20",
   },
   {
     key: "Ab",
     musicalKey: "A♭ Major",
-    title: "Daydreaming & Reflection",
-    content: "Research at Yale Law School has shown me the power of stepping back to see the bigger picture. In the quiet moments between meetings, on ski slopes, or while climbing — that's when the most profound insights emerge. Daydreaming isn't escapism; it's essential cognition. It's in these ethereal spaces that I connect dots others miss, finding patterns in chaos and meaning in complexity. The philosopher's key, A-flat major, represents the contemplative side of ambition — the understanding that strategic thinking requires both intense focus and spacious wonder.",
+    title: "daydreaming & reflection",
+    content: "i think a lot — sometimes too much. but reflection’s how i make sense of everything: work, friendships, the next move. i’ve realized that daydreaming isn’t a break from life, it’s part of how i live it. ideas usually start as a quiet thought i can’t shake, and thinking them through has become its own kind of practice.",
     color: "from-purple-500/20 to-pink-500/20",
   },
 ];
@@ -43,7 +43,7 @@ export default function About() {
             Themes & Variations
           </h1>
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto" data-testid="text-about-subtitle">
-            Each variation reveals a different chapter, a different key, a different movement in the ongoing composition.
+            each variation reveals a different chapter, a different story, or a different lesson from life.
           </p>
         </motion.div>
 
@@ -119,12 +119,10 @@ export default function About() {
                 An Improviser's Note
               </h3>
               <p className="text-lg leading-loose text-muted-foreground" data-testid="text-improviser-note-content">
-                I've always believed that the best melodies emerge when we embrace uncertainty.
-                Whether I'm strategizing growth initiatives, advising founders, or exploring new research,
-                I approach each challenge like a jazz musician approaches a solo — with preparation,
-                presence, and the courage to play something unexpected. Structure gives us the foundation,
-                but improvisation is where magic happens. That's the rhythm I live by: prepared enough to be confident,
-                flexible enough to be surprised.
+              i’ve noticed that the best ideas often show up when things don’t go exactly as planned. whether i’m working on growth, 
+              helping founders, or exploring new research, i try to stay prepared but flexible. structure gives me a base, but the 
+              unexpected moments are usually where the energy and creativity come in. that’s the rhythm i try to live by: 
+              ready enough to keep moving, open enough to be surprised.
               </p>
             </motion.div>
           </div>

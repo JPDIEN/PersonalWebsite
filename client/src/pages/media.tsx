@@ -58,7 +58,7 @@ export default function Media() {
             Encore
           </h1>
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-            Rhythms I live by — playlists, moments, and the soundtrack to curiosity and adventure.
+            rhythms I live by — playlists, moments, and the soundtracks i enjoy.
           </p>
         </motion.div>
 
@@ -69,8 +69,8 @@ export default function Media() {
             className="text-center py-20"
           >
             <Music className="h-16 w-16 mx-auto text-muted-foreground mb-4" />
-            <p className="text-xl text-muted-foreground">The gallery is being composed.</p>
-            <p className="text-sm text-muted-foreground mt-2">New media coming soon.</p>
+            <p className="text-xl text-muted-foreground">the gallery is being composed.</p>
+            <p className="text-sm text-muted-foreground mt-2">new media coming soon.</p>
           </motion.div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 auto-rows-auto">

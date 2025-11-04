@@ -90,7 +90,12 @@ export class MemStorage implements IStorage {
 
     milestones.forEach((m) => {
       const id = randomUUID();
-      this.milestones.set(id, { ...m, id });
+      this.milestones.set(id, { 
+        ...m, 
+        id,
+        endDate: m.endDate ?? null,
+        logoUrl: m.logoUrl ?? null,
+      });
     });
 
     // Seed Blog Posts
@@ -141,7 +146,11 @@ The best strategies aren't manufactured through sheer willpower. They're discove
 
     posts.forEach((p) => {
       const id = randomUUID();
-      this.blogPosts.set(id, { ...p, id });
+      this.blogPosts.set(id, { 
+        ...p, 
+        id,
+        imageUrl: p.imageUrl ?? null,
+      });
     });
 
     // Seed Media Items
@@ -170,7 +179,15 @@ The best strategies aren't manufactured through sheer willpower. They're discove
 
     media.forEach((m) => {
       const id = randomUUID();
-      this.mediaItems.set(id, { ...m, id });
+      this.mediaItems.set(id, { 
+        ...m, 
+        id,
+        description: m.description ?? null,
+        aspectRatio: m.aspectRatio ?? null,
+        musicalKey: m.musicalKey ?? null,
+        mood: m.mood ?? null,
+        thumbnailUrl: m.thumbnailUrl ?? null,
+      });
     });
   }
 
@@ -187,7 +204,11 @@ The best strategies aren't manufactured through sheer willpower. They're discove
 
   async createBlogPost(insertPost: InsertBlogPost): Promise<BlogPost> {
     const id = randomUUID();
-    const post: BlogPost = { ...insertPost, id };
+    const post: BlogPost = { 
+      ...insertPost, 
+      id,
+      imageUrl: insertPost.imageUrl ?? null,
+    };
     this.blogPosts.set(id, post);
     return post;
   }
@@ -199,7 +220,12 @@ The best strategies aren't manufactured through sheer willpower. They're discove
 
   async createMilestone(insertMilestone: InsertTimelineMilestone): Promise<TimelineMilestone> {
     const id = randomUUID();
-    const milestone: TimelineMilestone = { ...insertMilestone, id };
+    const milestone: TimelineMilestone = { 
+      ...insertMilestone, 
+      id,
+      endDate: insertMilestone.endDate ?? null,
+      logoUrl: insertMilestone.logoUrl ?? null,
+    };
     this.milestones.set(id, milestone);
     return milestone;
   }
@@ -211,7 +237,15 @@ The best strategies aren't manufactured through sheer willpower. They're discove
 
   async createMediaItem(insertItem: InsertMediaItem): Promise<MediaItem> {
     const id = randomUUID();
-    const item: MediaItem = { ...insertItem, id };
+    const item: MediaItem = { 
+      ...insertItem, 
+      id,
+      description: insertItem.description ?? null,
+      aspectRatio: insertItem.aspectRatio ?? null,
+      musicalKey: insertItem.musicalKey ?? null,
+      mood: insertItem.mood ?? null,
+      thumbnailUrl: insertItem.thumbnailUrl ?? null,
+    };
     this.mediaItems.set(id, item);
     return item;
   }

@@ -15,14 +15,14 @@ export default function BlogPostPage() {
     queryKey: ["/api/blog"],
   });
 
-  const post = posts.find((p) => p.id === postId);
+  const post = posts.find((p: BlogPost) => p.id === postId);
 
   if (isLoading) {
     return (
       <div className="min-h-screen pt-24 flex items-center justify-center">
         <div className="text-center">
           <div className="inline-block h-8 w-8 animate-spin rounded-full border-4 border-solid border-primary border-r-transparent mb-4"></div>
-          <p className="text-muted-foreground">Loading post...</p>
+          <p className="text-muted-foreground">loading post...</p>
         </div>
       </div>
     );
@@ -32,11 +32,11 @@ export default function BlogPostPage() {
     return (
       <div className="min-h-screen pt-24 flex items-center justify-center">
         <div className="text-center">
-          <h1 className="text-2xl font-serif mb-4">Post not found</h1>
+          <h1 className="text-2xl font-serif mb-4">post not found</h1>
           <Link href="/journal">
             <button className="inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 border border-input hover:bg-accent hover:text-accent-foreground h-10 px-4 py-2">
               <ArrowLeft className="mr-2 h-4 w-4" />
-              Back to Journal
+              back to Journal
             </button>
           </Link>
         </div>
@@ -115,7 +115,7 @@ export default function BlogPostPage() {
             <Link href="/journal">
               <button className="inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 border border-input hover:bg-accent hover:text-accent-foreground h-11 px-8" data-testid="button-back-bottom">
                 <ArrowLeft className="mr-2 h-4 w-4" />
-                Back to all posts
+                back to all posts
               </button>
             </Link>
           </div>

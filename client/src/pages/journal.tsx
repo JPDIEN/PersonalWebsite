@@ -48,7 +48,7 @@ export default function Journal() {
             Interlude
           </h1>
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-            A living score notebook — essays, reflections, and thought experiments organized by tempo and theme.
+            a living notebook — essays, reflections, and thought experiments organized by tempo and theme.
           </p>
         </motion.div>
 

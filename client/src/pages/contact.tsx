@@ -34,15 +34,15 @@ export default function Contact() {
       setSubmitted(true);
       form.reset();
       toast({
-        title: "Message sent!",
-        description: "Thanks for reaching out. I'll get back to you soon.",
+        title: "message sent!",
+        description: "thanks for reaching out:) i'll get back to you soon.",
       });
       setTimeout(() => setSubmitted(false), 5000);
     },
     onError: () => {
       toast({
-        title: "Error",
-        description: "Failed to send message. Please try again.",
+        title: "error",
+        description: "failed to send message. please try again.",
         variant: "destructive",
       });
     },
@@ -53,10 +53,10 @@ export default function Contact() {
   };
 
   const socialLinks = [
-    { icon: Mail, label: "Email", href: "mailto:joseph@example.com" },
-    { icon: Linkedin, label: "LinkedIn", href: "https://linkedin.com" },
-    { icon: Twitter, label: "Twitter", href: "https://twitter.com" },
-    { icon: Github, label: "GitHub", href: "https://github.com" },
+    { icon: Mail, label: "Email", href: "jdiener2@nd.edu" },
+    { icon: Linkedin, label: "LinkedIn", href: "linkedin.com/in/josephpdiener" },
+    { icon: Twitter, label: "X", href: "x.com/Joseph__Diener" },
+    { icon: Github, label: "GitHub", href: "https://github.com/JPDIEN" },
   ];
 
   return (
@@ -72,7 +72,7 @@ export default function Contact() {
             Coda
           </h1>
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-            Every great composition ends with a resolution — but it's also an invitation for the next movement.
+          every ending leads into the next thing. if something here caught your attention, i’d love to keep the conversation going.
           </p>
         </motion.div>
 
@@ -176,9 +176,9 @@ export default function Contact() {
                       className="p-4 bg-primary/10 border-2 border-primary rounded-lg text-center"
                       data-testid="text-success"
                     >
-                      <p className="font-medium text-primary">Message sent successfully!</p>
+                      <p className="font-medium text-primary">message sent successfully!</p>
                       <p className="text-sm text-muted-foreground mt-1">
-                        I'll respond as soon as possible.
+                        i'll respond as soon as possible.
                       </p>
                     </motion.div>
                   )}
@@ -198,8 +198,8 @@ export default function Contact() {
               Let's make something worth hearing.
             </h2>
             <p className="text-lg text-muted-foreground mb-8 leading-relaxed" data-testid="text-contact-description">
-              Whether you're building a startup, exploring a new idea, or just want to connect —
-              I'm always excited to collaborate, advise, or simply jam on interesting problems.
+              whether you're building a startup, exploring a new idea, or just want to connect -
+              i'm always excited to collaborate, discuss cool ideas, or simply work on solving some interesting problems.
             </p>
 
             <div className="space-y-4">
@@ -225,7 +225,7 @@ export default function Contact() {
 
             <div className="mt-12 p-6 bg-muted/50 rounded-lg border-l-4 border-primary" data-testid="card-easter-egg">
               <p className="text-sm text-muted-foreground italic" data-testid="text-easter-egg">
-                💡 <strong>Easter egg:</strong> Try including the word "improvise" in your message
+                💡 <strong>Easter egg:</strong> try including the word "improvise" in your message
                 for a special touch.
               </p>
             </div>

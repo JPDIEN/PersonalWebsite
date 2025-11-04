@@ -60,9 +60,7 @@ export default function Home() {
             className="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto mb-8 leading-relaxed"
             data-testid="text-hero-subtitle"
           >
-            Welcome to the world of Joseph Diener — where strategy meets creativity,
-            where structure dances with improvisation, and where every melody reveals
-            a new chapter of growth, innovation, and curiosity.
+            welcome to my personal website! feel free to explore and learn about me.
           </motion.p>
 
           <motion.div
@@ -73,8 +71,8 @@ export default function Home() {
             data-testid="text-hero-roles"
           >
             <p className="font-medium">Growth & GTM Lead at Yelo</p>
-            <p>Startup Coach • Yale Law Researcher • Notre Dame Alumnus</p>
-            <p className="font-serif italic">Pianist • Daydreamer • Adventurer</p>
+            <p>Startup Coach • Growth Specialist • Notre Dame Student</p>
+            <p className="font-serif italic">Builder • Daydreamer • Friend</p>
           </motion.div>
         </motion.div>
 
@@ -112,7 +110,7 @@ export default function Home() {
             Begin the melody
           </h2>
           <p className="text-muted-foreground text-lg" data-testid="text-piano-subtitle">
-            Press Middle C to continue your journey through Joseph's world.
+            Press Middle C to get a glimpse into my life.
           </p>
         </motion.div>
 
@@ -147,9 +145,9 @@ export default function Home() {
           className="max-w-3xl mx-auto"
         >
           <blockquote className="font-serif text-2xl md:text-3xl leading-relaxed text-center italic border-l-4 border-primary pl-6 md:pl-8" data-testid="text-philosophy-quote">
-            "Life's most meaningful melodies come from improvisation —
-            the beautiful tension between structure and spontaneity,
-            between what we plan and what we discover along the way."
+            "i've found life's most meaningful experiences come from improvisation.
+            this balance between structure and spontaneity has shaped how I live and create. 
+            i build frameworks, but i’ve learned to let curiosity bend them when the moment asks for something new."
           </blockquote>
           <p className="text-right mt-6 text-muted-foreground" data-testid="text-philosophy-attribution">— Joseph Diener</p>
         </motion.div>
