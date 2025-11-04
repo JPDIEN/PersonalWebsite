@@ -99,39 +99,20 @@ Render provides: `https://your-app-name.onrender.com`
 
 ---
 
-## Option 3: Deploy to Vercel
+## Option 3: Deploy to Vercel (⚠️ Not Recommended for This App)
 
-Vercel is best for frontend-first apps. Note: Vercel works best if you split your API routes. For a full-stack Express app, Railway or Render are better choices.
+**Important:** Vercel is designed for serverless functions and static sites, not long-running Express servers. Your app uses a traditional Express server that listens on a port, which doesn't work well with Vercel's serverless model.
 
-### If You Choose Vercel:
+**For this Express + React + PostgreSQL stack, Railway or Render are strongly recommended.**
 
-1. **Sign up** at [vercel.com](https://vercel.com)
-2. **Install Vercel CLI:** `npm i -g vercel`
-3. **Create `vercel.json`** (see below)
-4. **Deploy:** `vercel --prod`
+If you still want to try Vercel, you would need to:
+1. Restructure your API routes into individual serverless functions
+2. Convert your Express server to use Vercel's serverless function format
+3. This requires significant code changes
 
-**Create `vercel.json`:**
-```json
-{
-  "version": 2,
-  "builds": [
-    {
-      "src": "package.json",
-      "use": "@vercel/node"
-    }
-  ],
-  "routes": [
-    {
-      "src": "/api/(.*)",
-      "dest": "/server/index.ts"
-    },
-    {
-      "src": "/(.*)",
-      "dest": "/client/$1"
-    }
-  ]
-}
-```
+**The warnings you see** (about deprecated packages) are just deprecation warnings, not errors. However, Vercel may still fail to deploy because it doesn't support your Express server architecture.
+
+**Recommendation:** Use **Railway** (Option 1) or **Render** (Option 2) instead.
 
 ---
 
