@@ -8,10 +8,12 @@ interface PianoKeyProps {
   index: number;
   onPlay?: (note: string) => void;
   isMiddleC?: boolean;
+  actionHint?: string;
 }
 
-function PianoKey({ note, isBlack = false, index, onPlay, isMiddleC = false }: PianoKeyProps) {
+function PianoKey({ note, isBlack = false, index, onPlay, isMiddleC = false, actionHint }: PianoKeyProps) {
   const [isPressed, setIsPressed] = useState(false);
+  const [showHint, setShowHint] = useState(false);
   const synthRef = useRef<Tone.Synth | null>(null);
 
   useEffect(() => {
@@ -58,20 +60,38 @@ function PianoKey({ note, isBlack = false, index, onPlay, isMiddleC = false }: P
       }`}
       style={{ left: "-1rem" }}
       onClick={playNote}
-      onMouseEnter={() => !isPressed && setIsPressed(true)}
-      onMouseLeave={() => setIsPressed(false)}
+      onMouseEnter={() => {
+        if (!isPressed) {
+          setIsPressed(true);
+          setShowHint(true);
+        }
+      }}
+      onMouseLeave={() => {
+        setIsPressed(false);
+        setShowHint(false);
+      }}
       data-testid={`piano-key-${note}`}
       role="button"
-      aria-label={`Piano key ${note}`}
+      aria-label={`Piano key ${note}${actionHint ? ` - ${actionHint}` : ""}`}
     >
       <div className="absolute inset-0 rounded-b-md bg-gradient-to-b from-gray-800 to-gray-900 opacity-50" />
+      {showHint && actionHint && (
+        <motion.div
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="absolute -top-12 left-1/2 -translate-x-1/2 bg-primary text-primary-foreground text-xs px-2 py-1 rounded whitespace-nowrap z-20 pointer-events-none"
+        >
+          {actionHint}
+          <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-0 h-0 border-l-4 border-r-4 border-t-4 border-transparent border-t-primary" />
+        </motion.div>
+      )}
     </motion.div>
   ) : (
     <motion.div
       initial={{ opacity: 0, y: -20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: index * 0.05, duration: 0.3 }}
-      className={`${baseWhiteKeyClass} ${
+      className={`${baseWhiteKeyClass} relative ${
         isPressed
           ? "bg-gray-100 shadow-inner translate-y-1"
           : isMiddleC
@@ -79,11 +99,19 @@ function PianoKey({ note, isBlack = false, index, onPlay, isMiddleC = false }: P
           : "bg-white border border-gray-300 shadow-md hover:shadow-lg hover:-translate-y-1"
       }`}
       onClick={playNote}
-      onMouseEnter={() => !isPressed && setIsPressed(true)}
-      onMouseLeave={() => setIsPressed(false)}
+      onMouseEnter={() => {
+        if (!isPressed) {
+          setIsPressed(true);
+          setShowHint(true);
+        }
+      }}
+      onMouseLeave={() => {
+        setIsPressed(false);
+        setShowHint(false);
+      }}
       data-testid={`piano-key-${note}`}
       role="button"
-      aria-label={`Piano key ${note}${isMiddleC ? " (Middle C)" : ""}`}
+      aria-label={`Piano key ${note}${isMiddleC ? " (Middle C)" : ""}${actionHint ? ` - ${actionHint}` : ""}`}
     >
       <div className="absolute inset-0 rounded-b-md bg-gradient-to-b from-white/50 to-transparent" />
       {isMiddleC && (
@@ -95,6 +123,16 @@ function PianoKey({ note, isBlack = false, index, onPlay, isMiddleC = false }: P
           C
         </motion.div>
       )}
+      {showHint && actionHint && (
+        <motion.div
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="absolute -top-12 left-1/2 -translate-x-1/2 bg-primary text-primary-foreground text-xs px-2 py-1 rounded whitespace-nowrap z-20 pointer-events-none"
+        >
+          {actionHint}
+          <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-0 h-0 border-l-4 border-r-4 border-t-4 border-transparent border-t-primary" />
+        </motion.div>
+      )}
     </motion.div>
   );
 }
@@ -102,9 +140,10 @@ function PianoKey({ note, isBlack = false, index, onPlay, isMiddleC = false }: P
 interface PianoKeyboardProps {
   onNotePlay?: (note: string) => void;
   octaves?: number;
+  keyHints?: Record<string, string>;
 }
 
-export function PianoKeyboard({ onNotePlay, octaves = 2 }: PianoKeyboardProps) {
+export function PianoKeyboard({ onNotePlay, octaves = 2, keyHints = {} }: PianoKeyboardProps) {
   const whiteNotes = ["C", "D", "E", "F", "G", "A", "B"];
   const blackNotePositions: Record<string, number> = {
     "C#": 0,
@@ -158,6 +197,7 @@ export function PianoKeyboard({ onNotePlay, octaves = 2 }: PianoKeyboardProps) {
             index={index}
             onPlay={onNotePlay}
             isMiddleC={key.isMiddleC}
+            actionHint={keyHints[key.note]}
           />
         ))}
         {blackKeys.map((key, index) => (
@@ -173,6 +213,7 @@ export function PianoKeyboard({ onNotePlay, octaves = 2 }: PianoKeyboardProps) {
               isBlack
               index={index + whiteKeys.length}
               onPlay={onNotePlay}
+              actionHint={keyHints[key.note]}
             />
           </div>
         ))}

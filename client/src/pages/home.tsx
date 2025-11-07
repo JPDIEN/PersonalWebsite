@@ -9,11 +9,97 @@ export default function Home() {
   const { scrollY } = useScroll();
   const y = useTransform(scrollY, [0, 500], [0, 250]);
 
-  const handleNotePlay = (note: string) => {
-    if (note === "C4") {
+  // Map each piano key to an interactive action
+  const keyActions: Record<string, () => void> = {
+    // First Octave (C4-B4) - Main navigation
+    "C4": () => setTimeout(() => setLocation("/about"), 300),
+    "C#4": () => setTimeout(() => setLocation("/experience"), 300),
+    "D4": () => setTimeout(() => setLocation("/journal"), 300),
+    "D#4": () => setTimeout(() => setLocation("/media"), 300),
+    "E4": () => setTimeout(() => setLocation("/contact"), 300),
+    "F4": () => {
+      // Scroll to philosophy section
       setTimeout(() => {
-        setLocation("/about");
+        const element = document.getElementById("philosophy-section");
+        element?.scrollIntoView({ behavior: "smooth" });
       }, 300);
+    },
+    "F#4": () => {
+      // Scroll back to top
+      setTimeout(() => {
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      }, 300);
+    },
+    "G4": () => setTimeout(() => setLocation("/about"), 300),
+    "G#4": () => setTimeout(() => setLocation("/experience"), 300),
+    "A4": () => setTimeout(() => setLocation("/journal"), 300),
+    "A#4": () => setTimeout(() => setLocation("/media"), 300),
+    "B4": () => setTimeout(() => setLocation("/contact"), 300),
+    
+    // Second Octave (C5-B5) - Alternative actions
+    "C5": () => {
+      // Scroll to piano section
+      setTimeout(() => {
+        const element = document.getElementById("piano-section");
+        element?.scrollIntoView({ behavior: "smooth" });
+      }, 300);
+    },
+    "C#5": () => setTimeout(() => setLocation("/about"), 300),
+    "D5": () => setTimeout(() => setLocation("/experience"), 300),
+    "D#5": () => setTimeout(() => setLocation("/journal"), 300),
+    "E5": () => setTimeout(() => setLocation("/media"), 300),
+    "F5": () => setTimeout(() => setLocation("/contact"), 300),
+    "F#5": () => {
+      // Scroll to philosophy
+      setTimeout(() => {
+        const element = document.getElementById("philosophy-section");
+        element?.scrollIntoView({ behavior: "smooth" });
+      }, 300);
+    },
+    "G5": () => {
+      // Scroll to top
+      setTimeout(() => {
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      }, 300);
+    },
+    "G#5": () => setTimeout(() => setLocation("/about"), 300),
+    "A5": () => setTimeout(() => setLocation("/experience"), 300),
+    "A#5": () => setTimeout(() => setLocation("/journal"), 300),
+    "B5": () => setTimeout(() => setLocation("/media"), 300),
+  };
+
+  // Map each key to a user-friendly hint
+  const keyHints: Record<string, string> = {
+    "C4": "About",
+    "C#4": "Experience",
+    "D4": "Journal",
+    "D#4": "Media",
+    "E4": "Contact",
+    "F4": "Philosophy",
+    "F#4": "Back to Top",
+    "G4": "About",
+    "G#4": "Experience",
+    "A4": "Journal",
+    "A#4": "Media",
+    "B4": "Contact",
+    "C5": "Piano",
+    "C#5": "About",
+    "D5": "Experience",
+    "D#5": "Journal",
+    "E5": "Media",
+    "F5": "Contact",
+    "F#5": "Philosophy",
+    "G5": "Back to Top",
+    "G#5": "About",
+    "A5": "Experience",
+    "A#5": "Journal",
+    "B5": "Media",
+  };
+
+  const handleNotePlay = (note: string) => {
+    const action = keyActions[note];
+    if (action) {
+      action();
     }
   };
 
@@ -110,7 +196,7 @@ export default function Home() {
             Begin the melody
           </h2>
           <p className="text-muted-foreground text-lg" data-testid="text-piano-subtitle">
-            Press Middle C to get a glimpse into my life.
+            Each key unlocks a different part of my story. Explore and discover.
           </p>
         </motion.div>
 
@@ -120,7 +206,7 @@ export default function Home() {
           viewport={{ once: true }}
           transition={{ duration: 0.8, delay: 0.2 }}
         >
-          <PianoKeyboard onNotePlay={handleNotePlay} octaves={2} />
+          <PianoKeyboard onNotePlay={handleNotePlay} octaves={2} keyHints={keyHints} />
         </motion.div>
 
         <motion.p
@@ -136,7 +222,7 @@ export default function Home() {
       </section>
 
       {/* Philosophy Section */}
-      <section className="py-20 md:py-24 px-4">
+      <section id="philosophy-section" className="py-20 md:py-24 px-4">
         <motion.div
           initial={{ opacity: 0, y: 40 }}
           whileInView={{ opacity: 1, y: 0 }}
