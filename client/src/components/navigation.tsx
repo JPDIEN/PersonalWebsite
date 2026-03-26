@@ -1,108 +1,149 @@
 import { useState } from "react";
 import { Link, useLocation } from "wouter";
 import { Menu, X } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { ThemeToggle } from "@/components/theme-toggle";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence, useScroll, useMotionValueEvent } from "framer-motion";
 
 const navLinks = [
-  { href: "/", label: "Prelude" },
-  { href: "/about", label: "Themes" },
-  { href: "/experience", label: "The Score" },
-  { href: "/journal", label: "Interlude" },
-  { href: "/media", label: "Encore" },
-  { href: "/contact", label: "Coda" },
+  { href: "/about", label: "About" },
+  { href: "/experience", label: "Work" },
+  { href: "/journal", label: "Writing" },
+  { href: "/media", label: "Media" },
+  { href: "/contact", label: "Contact" },
 ];
 
 export function Navigation() {
   const [location] = useLocation();
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [open, setOpen] = useState(false);
+  const [atTop, setAtTop] = useState(true);
+  const { scrollY } = useScroll();
+
+  useMotionValueEvent(scrollY, "change", (latest) => {
+    setAtTop(latest < 60);
+  });
+
+  const onHome = location === "/";
+  const transparent = onHome && atTop;
 
   return (
-    <motion.header
-      initial={{ y: -100 }}
-      animate={{ y: 0 }}
-      transition={{ duration: 0.5, ease: "easeOut" }}
-      className="fixed top-0 left-0 right-0 z-50 bg-background/80 backdrop-blur-md border-b"
-    >
-      <nav className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-16">
-          <Link href="/" className="font-serif text-xl font-semibold tracking-wide hover-elevate px-2 py-1 rounded-md" data-testid="link-home">
+    <>
+      {/* Fixed header — transparent on hero, minimal after scroll */}
+      <header
+        className="fixed top-0 left-0 right-0 z-50 transition-all duration-500"
+        style={{
+          background: transparent ? "transparent" : "rgba(255,255,255,0.85)",
+          backdropFilter: transparent ? "none" : "blur(12px)",
+          borderBottom: transparent ? "none" : "1px solid rgba(0,0,0,0.06)",
+        }}
+      >
+        <div className="flex items-center justify-between px-6 md:px-10 h-14">
+          <Link
+            href="/"
+            className="font-serif font-semibold text-lg tracking-wide transition-colors"
+            style={{ color: transparent ? "rgba(255,255,255,0.9)" : "inherit" }}
+            data-testid="link-home"
+          >
             JD
           </Link>
 
-          {/* Desktop Navigation */}
-          <div className="hidden md:flex items-center space-x-1">
-            {navLinks.map((link) => (
-              <Link 
-                key={link.href} 
-                href={link.href}
-                className={`px-4 py-2 text-sm font-medium rounded-md transition-all duration-200 hover-elevate ${
-                  location === link.href
-                    ? "text-foreground"
-                    : "text-muted-foreground"
-                }`}
-                data-testid={`link-${link.label.toLowerCase()}`}
-              >
-                {link.label}
-                {location === link.href && (
-                  <motion.div
-                    layoutId="underline"
-                    className="h-0.5 bg-primary mt-1"
-                    transition={{ duration: 0.2 }}
-                  />
-                )}
-              </Link>
-            ))}
-            <ThemeToggle />
-          </div>
-
-          {/* Mobile Menu Button */}
-          <div className="flex items-center space-x-2 md:hidden">
-            <ThemeToggle />
-            <Button
-              variant="ghost"
-              size="icon"
-              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              data-testid="button-mobile-menu"
-              aria-label="Toggle menu"
-            >
-              {mobileMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
-            </Button>
-          </div>
-        </div>
-      </nav>
-
-      {/* Mobile Menu */}
-      <AnimatePresence>
-        {mobileMenuOpen && (
-          <motion.div
-            initial={{ opacity: 0, height: 0 }}
-            animate={{ opacity: 1, height: "auto" }}
-            exit={{ opacity: 0, height: 0 }}
-            transition={{ duration: 0.3 }}
-            className="md:hidden bg-background border-b overflow-hidden"
+          <button
+            onClick={() => setOpen(true)}
+            className="transition-opacity hover:opacity-60"
+            style={{ color: transparent ? "rgba(255,255,255,0.8)" : "inherit" }}
+            aria-label="Open menu"
+            data-testid="button-mobile-menu"
           >
-            <div className="px-4 py-4 space-y-2">
-              {navLinks.map((link) => (
-                <Link 
-                  key={link.href} 
-                  href={link.href}
-                  onClick={() => setMobileMenuOpen(false)}
-                  className={`block px-4 py-3 text-base font-medium rounded-md transition-colors ${
-                    location === link.href
-                      ? "bg-accent text-foreground"
-                      : "text-muted-foreground hover-elevate"
-                  }`}
-                  data-testid={`link-mobile-${link.label.toLowerCase()}`}
+            <Menu className="h-5 w-5" />
+          </button>
+        </div>
+      </header>
+
+      {/* Full-screen drawer */}
+      <AnimatePresence>
+        {open && (
+          <>
+            {/* Backdrop */}
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.3 }}
+              className="fixed inset-0 z-50 bg-black/40"
+              onClick={() => setOpen(false)}
+            />
+
+            {/* Drawer */}
+            <motion.div
+              initial={{ x: "100%" }}
+              animate={{ x: 0 }}
+              exit={{ x: "100%" }}
+              transition={{ type: "tween", duration: 0.35, ease: [0.32, 0, 0.67, 0] }}
+              className="fixed top-0 right-0 bottom-0 z-50 w-72 flex flex-col"
+              style={{
+                background: "#0f0f0f",
+                borderLeft: "1px solid rgba(255,255,255,0.06)",
+              }}
+            >
+              {/* Close */}
+              <div className="flex justify-end px-6 pt-5 pb-8">
+                <button
+                  onClick={() => setOpen(false)}
+                  className="text-white/50 hover:text-white/90 transition-colors"
+                  aria-label="Close menu"
                 >
-                  {link.label}
-                </Link>
-              ))}
-            </div>
-          </motion.div>
+                  <X className="h-5 w-5" />
+                </button>
+              </div>
+
+              {/* Links */}
+              <nav className="flex flex-col px-8 gap-1">
+                {navLinks.map((link, i) => (
+                  <motion.div
+                    key={link.href}
+                    initial={{ opacity: 0, x: 20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ delay: i * 0.05 + 0.1 }}
+                  >
+                    <Link
+                      href={link.href}
+                      onClick={() => setOpen(false)}
+                      className="block py-3 font-serif text-2xl transition-colors"
+                      style={{
+                        color: location === link.href ? "rgba(255,255,255,1)" : "rgba(255,255,255,0.45)",
+                      }}
+                      data-testid={`link-${link.label.toLowerCase()}`}
+                    >
+                      {link.label}
+                    </Link>
+                  </motion.div>
+                ))}
+              </nav>
+
+              {/* Footer in drawer */}
+              <div className="mt-auto px-8 pb-10">
+                <div className="flex gap-5">
+                  {[
+                    { label: "Substack", href: "https://substack.com/@josephdiener" },
+                    { label: "LinkedIn", href: "https://linkedin.com/in/josephpdiener" },
+                    { label: "X", href: "https://x.com/Joseph__Diener" },
+                    { label: "GitHub", href: "https://github.com/JPDIEN" },
+                  ].map(s => (
+                    <a
+                      key={s.label}
+                      href={s.href}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-xs tracking-wider transition-colors"
+                      style={{ color: "rgba(255,255,255,0.35)" }}
+                    >
+                      {s.label}
+                    </a>
+                  ))}
+                </div>
+              </div>
+            </motion.div>
+          </>
         )}
       </AnimatePresence>
-    </motion.header>
+    </>
   );
 }
