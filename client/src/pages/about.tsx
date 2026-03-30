@@ -51,11 +51,11 @@ export default function About() {
               without a manual.
             </p>
             <p>
-              Right now I'm a freshman at Notre Dame studying finance. Most of my time goes
-              toward startups and early-stage investing: coaching founders at the Idea Center,
-              doing VC at NDVC, running events for FouNDers Club. I've managed teams of 30+,
-              helped founders raise money, and once spent a summer at Yale thinking about
-              epistemology with a law professor. I'm still figuring out the throughline.
+              Right now I'm at Notre Dame studying finance. Most of my time goes toward
+              startups and early-stage investing: coaching founders at the Idea Center,
+              doing VC at NDVC, running events for FouNDers Club. I've helped founders
+              raise money, run growth at a VC-backed startup, and once spent a summer at
+              Yale thinking about epistemology with a law professor. Still figuring out the throughline.
             </p>
             <p>
               Piano is probably the thing I care most about that has nothing to do with work.
