@@ -6,12 +6,15 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { ThemeProvider } from "@/lib/theme-provider";
 import { Navigation } from "@/components/navigation";
 import { Terminal } from "@/components/terminal";
+import { KeyboardPiano } from "@/components/keyboard-piano";
 import Home from "@/pages/home";
 import About from "@/pages/about";
 import Experience from "@/pages/experience";
 import Journal from "@/pages/journal";
 import Contact from "@/pages/contact";
 import Universe from "@/pages/universe";
+import Now from "@/pages/now";
+import Wunderkammer from "@/pages/wunderkammer";
 import NotFound from "@/pages/not-found";
 
 function Router() {
@@ -28,9 +31,12 @@ function Router() {
         <Route path="/journal" component={Journal} />
         <Route path="/contact" component={Contact} />
         <Route path="/universe" component={Universe} />
+        <Route path="/now" component={Now} />
+        <Route path="/wunderkammer" component={Wunderkammer} />
         <Route component={NotFound} />
       </Switch>
       <Terminal />
+      <KeyboardPiano />
     </>
   );
 }

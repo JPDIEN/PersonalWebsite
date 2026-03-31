@@ -9,8 +9,10 @@ const COMMANDS: Record<string, { description: string; action?: string }> = {
   writing:  { description: "things I've written",    action: "/journal" },
   books:    { description: "what I'm reading",       action: "/about#books" },
   contact:  { description: "get in touch",           action: "/contact" },
-  universe: { description: "open the constellation", action: "/universe" },
-  clear:    { description: "clear the terminal" },
+  universe:     { description: "open the constellation",   action: "/universe" },
+  now:          { description: "what I'm doing right now", action: "/now" },
+  piano:        { description: "open the keyboard piano",  action: "PIANO" },
+  clear:        { description: "clear the terminal" },
 };
 
 type Line = { type: "input" | "output" | "error"; text: string };
@@ -88,6 +90,14 @@ export function Terminal() {
 
       const match = COMMANDS[cmd];
       if (match?.action) {
+        if (match.action === "PIANO") {
+          push("output", "opening piano…");
+          setTimeout(() => {
+            setOpen(false);
+            window.dispatchEvent(new CustomEvent("open-piano"));
+          }, 300);
+          return;
+        }
         push("output", `navigating to ${match.action}…`);
         setTimeout(() => {
           setOpen(false);
