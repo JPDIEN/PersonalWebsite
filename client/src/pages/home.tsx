@@ -1,44 +1,14 @@
-import { useState, useEffect } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
 import { ChevronDown } from "lucide-react";
 import natureImage from "@assets/generated_images/nature-hero.jpg";
 
-const FALLBACK_NOW = [
+const now = [
   { label: "Reading", value: "Man's Search for Meaning" },
   { label: "Working on", value: "Notre Dame Venture Capital" },
   { label: "Based at", value: "University of Notre Dame" },
 ];
 
-function useNowData() {
-  const [now, setNow] = useState(FALLBACK_NOW);
-
-  useEffect(() => {
-    const url = import.meta.env.VITE_GOOGLE_SHEET_CSV_URL;
-    if (!url) return;
-
-    fetch(url)
-      .then((r) => r.text())
-      .then((csv) => {
-        const rows = csv.trim().split("\n").slice(1); // skip header row
-        const parsed = rows
-          .map((row) => {
-            const commaIdx = row.indexOf(",");
-            if (commaIdx === -1) return null;
-            const label = row.slice(0, commaIdx).replace(/^"|"$/g, "").trim();
-            const value = row.slice(commaIdx + 1).replace(/^"|"$/g, "").trim();
-            return label && value ? { label, value } : null;
-          })
-          .filter(Boolean) as { label: string; value: string }[];
-        if (parsed.length > 0) setNow(parsed);
-      })
-      .catch(() => {}); // keep fallback on error
-  }, []);
-
-  return now;
-}
-
 export default function Home() {
-  const now = useNowData();
   const { scrollY } = useScroll();
   const y = useTransform(scrollY, [0, 700], [0, 180]);
 
