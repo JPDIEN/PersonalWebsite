@@ -1,127 +1,132 @@
-import { motion, useScroll, useTransform } from "framer-motion";
-import { ChevronDown } from "lucide-react";
-import natureImage from "@assets/generated_images/nature-hero.jpg";
+import { motion } from "framer-motion";
+import { useEffect, useState } from "react";
 
-const now = [
-  { label: "Reading", value: "Man's Search for Meaning" },
-  { label: "Working on", value: "Notre Dame Venture Capital" },
-  { label: "Based at", value: "University of Notre Dame" },
-];
+// Split text into words for the reveal animation
+function WordReveal({
+  text,
+  delay = 0,
+  className = "",
+}: {
+  text: string;
+  delay?: number;
+  className?: string;
+}) {
+  const words = text.split(" ");
+  return (
+    <span className={className}>
+      {words.map((word, i) => (
+        <motion.span
+          key={i}
+          initial={{ opacity: 0, filter: "blur(8px)", y: 6 }}
+          animate={{ opacity: 1, filter: "blur(0px)", y: 0 }}
+          transition={{
+            delay: delay + i * 0.055,
+            duration: 0.5,
+            ease: [0.25, 0.1, 0.25, 1],
+          }}
+          style={{ display: "inline-block", marginRight: "0.28em" }}
+        >
+          {word}
+        </motion.span>
+      ))}
+    </span>
+  );
+}
 
 export default function Home() {
-  const { scrollY } = useScroll();
-  const y = useTransform(scrollY, [0, 700], [0, 180]);
+  const [show, setShow] = useState(false);
+
+  useEffect(() => {
+    const t = setTimeout(() => setShow(true), 80);
+    return () => clearTimeout(t);
+  }, []);
+
+  if (!show) return null;
 
   return (
-    <div>
-      {/* Hero */}
-      <section className="relative h-screen flex flex-col justify-center overflow-hidden">
-        <motion.div className="absolute inset-0 z-0" style={{ y }}>
-          <div
-            className="absolute inset-0 bg-cover bg-center scale-110"
-            style={{ backgroundImage: `url(${natureImage})` }}
-          />
-          <div
-            className="absolute inset-0"
-            style={{
-              background:
-                "linear-gradient(to bottom, rgba(0,0,0,0.45) 0%, rgba(0,0,0,0.1) 40%, rgba(0,0,0,0.55) 100%)",
-            }}
-          />
-        </motion.div>
+    <div className="min-h-screen flex flex-col justify-center px-8 md:px-16 pt-28 pb-16">
+      <div className="max-w-2xl">
 
-        <div className="relative z-10 px-8 md:px-16 max-w-5xl">
-          <motion.p
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.3, duration: 1 }}
-            className="text-white/50 text-xs tracking-[0.25em] uppercase mb-5 font-sans"
-          >
-            Joseph Diener
-          </motion.p>
-
-          <motion.h1
-            initial={{ opacity: 0, y: 24 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.5, duration: 1, ease: [0.16, 1, 0.3, 1] }}
-            className="font-serif text-white leading-[1.02]"
-            style={{ fontSize: "clamp(3.2rem, 8.5vw, 8rem)", letterSpacing: "-0.03em" }}
-          >
-            "We must never
-            <br />just exist, but live."
-          </motion.h1>
-
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 1, duration: 0.8 }}
-            className="mt-7 flex items-center gap-4"
-          >
-            <div className="h-px w-10 bg-white/35" />
-            <p className="text-white/45 text-sm font-sans tracking-widest">
-              Pier Giorgio Frassati
-            </p>
-          </motion.div>
-        </div>
-
-        <motion.button
+        {/* Name */}
+        <motion.p
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          transition={{ delay: 1.4, duration: 0.8 }}
-          onClick={() =>
-            document.getElementById("intro")?.scrollIntoView({ behavior: "smooth" })
-          }
-          className="absolute bottom-8 right-8 z-10 text-white/35 hover:text-white/70 transition-colors"
+          transition={{ duration: 0.6 }}
+          className="text-xs tracking-[0.22em] uppercase mb-10"
+          style={{ color: "var(--muted-foreground)", opacity: 0.45 }}
         >
-          <motion.div
-            animate={{ y: [0, 6, 0] }}
-            transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
-          >
-            <ChevronDown className="h-5 w-5" />
-          </motion.div>
-        </motion.button>
-      </section>
+          Joseph Diener
+        </motion.p>
 
-      {/* Intro */}
-      <section id="intro" className="py-24 md:py-32 px-8 md:px-16">
-        <div className="max-w-5xl mx-auto grid md:grid-cols-2 gap-16 md:gap-24 items-start">
-          {/* Bio */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.7 }}
+        {/* Bio paragraphs */}
+        <div className="space-y-5">
+          <p
+            className="leading-relaxed"
+            style={{ fontSize: "clamp(1.05rem, 2.2vw, 1.25rem)" }}
           >
-            <p className="text-base md:text-lg leading-relaxed text-foreground/75">
-              Grew up the oldest of six kids, homeschooled. Made my own opportunities.
-              Now at Notre Dame studying finance and spending most of my time in the
-              startup and VC world.
-            </p>
-            <p className="mt-4 text-base md:text-lg leading-relaxed text-foreground/75">
-              I play piano, read too many books at once, and think the best ideas show
-              up when you're not trying to have them.
-            </p>
-          </motion.div>
+            <WordReveal
+              text="Grew up the oldest of six, homeschooled. Made my own opportunities."
+              delay={0.1}
+            />
+          </p>
 
-          {/* Now */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.7, delay: 0.12 }}
-            className="space-y-7"
+          <p
+            className="leading-relaxed"
+            style={{ fontSize: "clamp(1.05rem, 2.2vw, 1.25rem)" }}
           >
-            {now.map(({ label, value }) => (
-              <div key={label}>
-                <p className="text-xs tracking-[0.2em] uppercase text-foreground/35 mb-1">
-                  {label}
-                </p>
-                <p className="text-base font-medium">{value}</p>
-              </div>
-            ))}
-          </motion.div>
+            <WordReveal
+              text="Now at Notre Dame studying finance and spending most of my time in the startup and VC world."
+              delay={0.55}
+            />
+          </p>
+
+          <p
+            className="leading-relaxed"
+            style={{ fontSize: "clamp(1.05rem, 2.2vw, 1.25rem)" }}
+          >
+            <WordReveal
+              text="I play piano, read too many books at once, and think the best ideas show up when you stop looking for them."
+              delay={1.05}
+            />
+          </p>
         </div>
-      </section>
+
+        {/* Frassati */}
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 2.4, duration: 0.9 }}
+          className="mt-14 flex items-center gap-4"
+        >
+          <div className="h-px w-8 bg-current opacity-20" />
+          <p
+            className="text-sm font-serif italic"
+            style={{ color: "var(--muted-foreground)", opacity: 0.45 }}
+          >
+            "We must never just exist, but live." — Pier Giorgio Frassati
+          </p>
+        </motion.div>
+
+      </div>
+
+      {/* Terminal hint */}
+      <motion.p
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 3, duration: 1 }}
+        className="fixed bottom-7 right-8 text-xs font-mono"
+        style={{ color: "var(--muted-foreground)", opacity: 0.3 }}
+      >
+        press <kbd
+          className="px-1 py-0.5 rounded text-xs"
+          style={{
+            background: "var(--muted)",
+            border: "1px solid var(--border)",
+            opacity: 1,
+            color: "var(--foreground)",
+          }}
+        >/</kbd> to explore
+      </motion.p>
     </div>
   );
 }
