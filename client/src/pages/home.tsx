@@ -109,24 +109,32 @@ export default function Home() {
 
       </div>
 
-      {/* Terminal hint */}
-      <motion.p
+      {/* Terminal hint — tappable on mobile, keyboard hint on desktop */}
+      <motion.button
         initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
+        animate={{ opacity: 0.3 }}
         transition={{ delay: 3, duration: 1 }}
-        className="fixed bottom-7 right-8 text-xs font-mono"
-        style={{ color: "var(--muted-foreground)", opacity: 0.3 }}
+        whileHover={{ opacity: 0.6 }}
+        onClick={() => window.dispatchEvent(new CustomEvent("open-terminal"))}
+        className="fixed bottom-7 right-8 text-xs font-mono cursor-pointer"
+        style={{ color: "var(--muted-foreground)", background: "none", border: "none", padding: 0 }}
+        aria-label="Open terminal"
       >
-        press <kbd
+        <span className="hidden sm:inline">press </span>
+        <kbd
           className="px-1 py-0.5 rounded text-xs"
           style={{
             background: "var(--muted)",
             border: "1px solid var(--border)",
-            opacity: 1,
             color: "var(--foreground)",
           }}
-        >/</kbd> to explore
-      </motion.p>
+        >
+          <span className="hidden sm:inline">/</span>
+          <span className="sm:hidden">&gt;_</span>
+        </kbd>
+        <span className="hidden sm:inline"> to explore</span>
+        <span className="sm:hidden"> explore</span>
+      </motion.button>
     </div>
   );
 }

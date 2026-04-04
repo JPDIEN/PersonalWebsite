@@ -34,7 +34,7 @@ export function Terminal() {
   const bottomRef = useRef<HTMLDivElement>(null);
   const [, navigate] = useLocation();
 
-  // Open on "/" keypress (when not in an input field)
+  // Open on "/" keypress (when not in an input field) or via custom event (mobile)
   useEffect(() => {
     const handler = (e: KeyboardEvent) => {
       const tag = (e.target as HTMLElement).tagName;
@@ -47,8 +47,13 @@ export function Terminal() {
         setOpen(false);
       }
     };
+    const openHandler = () => setOpen(true);
     window.addEventListener("keydown", handler);
-    return () => window.removeEventListener("keydown", handler);
+    window.addEventListener("open-terminal", openHandler);
+    return () => {
+      window.removeEventListener("keydown", handler);
+      window.removeEventListener("open-terminal", openHandler);
+    };
   }, [open]);
 
   // Focus input when opened

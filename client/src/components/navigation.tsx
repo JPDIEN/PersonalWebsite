@@ -119,7 +119,20 @@ export function Navigation() {
               </nav>
 
               {/* Footer in drawer */}
-              <div className="mt-auto px-8 pb-10">
+              <div className="mt-auto px-8 pb-10 space-y-5">
+                {/* Terminal shortcut */}
+                <button
+                  onClick={() => {
+                    setOpen(false);
+                    setTimeout(() => window.dispatchEvent(new CustomEvent("open-terminal")), 200);
+                  }}
+                  className="flex items-center gap-2 transition-opacity hover:opacity-70"
+                  style={{ color: "rgba(255,255,255,0.25)", background: "none", border: "none", padding: 0, cursor: "pointer" }}
+                >
+                  <span className="font-mono text-xs tracking-widest">&gt;_</span>
+                  <span className="text-xs tracking-wider">terminal</span>
+                </button>
+
                 <div className="flex gap-5">
                   {[
                     { label: "Substack", href: "https://substack.com/@josephdiener" },

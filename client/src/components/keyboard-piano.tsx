@@ -83,6 +83,21 @@ export function KeyboardPiano() {
   const BLACK_H = 100;
   const totalW = WHITE_KEYS.length * WHITE_W;
 
+  // Scale piano to fit viewport on mobile
+  const [scale, setScale] = useState(1);
+  useEffect(() => {
+    const upd = () => setScale(Math.min(1, (window.innerWidth - 16) / totalW));
+    upd();
+    window.addEventListener("resize", upd);
+    return () => window.removeEventListener("resize", upd);
+  }, [totalW]);
+
+  // Touch handler factory for keys
+  const touchPlay = useCallback((note: string) => (e: React.TouchEvent) => {
+    e.preventDefault();
+    playNote(note);
+  }, [playNote]);
+
   return (
     <AnimatePresence>
       {open && (
@@ -99,7 +114,7 @@ export function KeyboardPiano() {
           {/* Panel */}
           <motion.div
             className="fixed bottom-0 left-1/2 z-50 flex flex-col items-center"
-            style={{ translateX: "-50%" }}
+            style={{ translateX: "-50%", transformOrigin: "bottom center", scale }}
             initial={{ y: "100%" }}
             animate={{ y: 0 }}
             exit={{ y: "100%" }}
@@ -119,9 +134,13 @@ export function KeyboardPiano() {
               <p style={{ color: "rgba(255,255,255,0.3)", fontSize: 11, letterSpacing: "0.18em" }} className="uppercase">
                 Play
               </p>
-              <p style={{ color: "rgba(255,255,255,0.15)", fontSize: 10, letterSpacing: "0.1em" }} className="uppercase">
-                Esc to close
-              </p>
+              <button
+                onClick={() => setOpen(false)}
+                style={{ color: "rgba(255,255,255,0.2)", fontSize: 10, letterSpacing: "0.1em", background: "none", border: "none", cursor: "pointer", padding: 0 }}
+                className="uppercase"
+              >
+                ✕ close
+              </button>
             </div>
 
             {/* Keys container */}
@@ -148,6 +167,7 @@ export function KeyboardPiano() {
                   <div
                     key={k.note}
                     onMouseDown={() => playNote(k.note)}
+                    onTouchStart={touchPlay(k.note)}
                     style={{
                       position: "absolute",
                       left: i * WHITE_W + 1,
@@ -187,6 +207,7 @@ export function KeyboardPiano() {
                   <div
                     key={k.note}
                     onMouseDown={(e) => { e.stopPropagation(); playNote(k.note); }}
+                    onTouchStart={(e) => { e.stopPropagation(); touchPlay(k.note)(e); }}
                     style={{
                       position: "absolute",
                       left: k.position * WHITE_W - BLACK_W / 2,
