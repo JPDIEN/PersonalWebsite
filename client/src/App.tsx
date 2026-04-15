@@ -24,17 +24,19 @@ function Router() {
   return (
     <>
       {!isUniverse && <Navigation />}
-      <Switch>
-        <Route path="/" component={Home} />
-        <Route path="/about" component={About} />
-        <Route path="/experience" component={Experience} />
-        <Route path="/journal" component={Journal} />
-        <Route path="/contact" component={Contact} />
-        <Route path="/universe" component={Universe} />
-        <Route path="/now" component={Now} />
-        <Route path="/wunderkammer" component={Wunderkammer} />
-        <Route component={NotFound} />
-      </Switch>
+      <div className={!isUniverse ? "md:pl-48" : ""}>
+        <Switch>
+          <Route path="/" component={Home} />
+          <Route path="/about" component={About} />
+          <Route path="/experience" component={Experience} />
+          <Route path="/journal" component={Journal} />
+          <Route path="/contact" component={Contact} />
+          <Route path="/universe" component={Universe} />
+          <Route path="/now" component={Now} />
+          <Route path="/wunderkammer" component={Wunderkammer} />
+          <Route component={NotFound} />
+        </Switch>
+      </div>
       <Terminal />
       <KeyboardPiano />
     </>
