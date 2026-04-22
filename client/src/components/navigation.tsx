@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Link, useLocation } from "wouter";
 import { Menu, X } from "lucide-react";
 import { motion, AnimatePresence, useScroll, useMotionValueEvent } from "framer-motion";
+import { ThemeToggle } from "@/components/theme-toggle";
 
 const navLinks = [
   { href: "/about", label: "About" },
@@ -65,21 +66,46 @@ export function Navigation() {
           ))}
         </nav>
 
-        {/* Terminal button at the bottom of sidebar */}
-        <div className="mt-auto">
-          <button
-            onClick={() => window.dispatchEvent(new CustomEvent("open-terminal"))}
-            className="flex items-center gap-2 hover:opacity-80 transition-opacity text-left w-full rounded-md px-2 py-2"
-            style={{
-              color: "hsl(var(--muted-foreground))",
-              background: "none",
-              border: "none",
-              cursor: "pointer",
-            }}
-          >
-            <span className="font-mono text-xs">&gt;_</span>
-            <span className="text-xs tracking-wider">terminal</span>
-          </button>
+        {/* Sidebar footer */}
+        <div className="mt-auto space-y-1">
+          {/* Theme toggle + terminal */}
+          <div className="flex items-center gap-1">
+            <ThemeToggle />
+            <button
+              onClick={() => window.dispatchEvent(new CustomEvent("open-terminal"))}
+              className="flex items-center gap-2 hover:opacity-80 transition-opacity text-left rounded-md px-2 py-2"
+              style={{
+                color: "hsl(var(--muted-foreground))",
+                background: "none",
+                border: "none",
+                cursor: "pointer",
+              }}
+            >
+              <span className="font-mono text-xs">&gt;_</span>
+              <span className="text-xs tracking-wider">terminal</span>
+            </button>
+          </div>
+
+          {/* Social links */}
+          <div className="flex flex-wrap gap-x-3 gap-y-1 px-2 pt-1">
+            {[
+              { label: "Substack", href: "https://substack.com/@josephdiener" },
+              { label: "LinkedIn", href: "https://linkedin.com/in/josephpdiener" },
+              { label: "X", href: "https://x.com/Joseph__Diener" },
+              { label: "GitHub", href: "https://github.com/JPDIEN" },
+            ].map(s => (
+              <a
+                key={s.label}
+                href={s.href}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-xs transition-colors hover:text-foreground"
+                style={{ color: "hsl(var(--muted-foreground))", opacity: 0.6 }}
+              >
+                {s.label}
+              </a>
+            ))}
+          </div>
         </div>
       </aside>
 

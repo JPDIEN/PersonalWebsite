@@ -1,21 +1,34 @@
-import { Card, CardContent } from "@/components/ui/card";
-import { AlertCircle } from "lucide-react";
+import { motion } from "framer-motion";
+import { Link } from "wouter";
 
 export default function NotFound() {
   return (
-    <div className="min-h-screen w-full flex items-center justify-center bg-gray-50">
-      <Card className="w-full max-w-md mx-4">
-        <CardContent className="pt-6">
-          <div className="flex mb-4 gap-2">
-            <AlertCircle className="h-8 w-8 text-red-500" />
-            <h1 className="text-2xl font-bold text-gray-900">404 Page Not Found</h1>
-          </div>
-
-          <p className="mt-4 text-sm text-gray-600">
-            Did you forget to add the page to the router?
-          </p>
-        </CardContent>
-      </Card>
+    <div className="min-h-screen flex flex-col items-center justify-center px-8 text-center">
+      <motion.div
+        initial={{ opacity: 0, y: 16 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5, ease: [0.25, 0.1, 0.25, 1] }}
+      >
+        <p
+          className="font-serif text-8xl font-bold mb-6 select-none"
+          style={{ color: "var(--muted-foreground)", opacity: 0.2 }}
+        >
+          404
+        </p>
+        <h1 className="font-serif text-2xl font-semibold mb-3 tracking-tight">
+          Page not found
+        </h1>
+        <p className="text-muted-foreground text-sm mb-8">
+          This one doesn't exist. Try somewhere else.
+        </p>
+        <Link
+          href="/"
+          className="text-sm font-medium transition-colors hover:text-primary"
+          style={{ color: "var(--muted-foreground)" }}
+        >
+          ← back home
+        </Link>
+      </motion.div>
     </div>
   );
 }
