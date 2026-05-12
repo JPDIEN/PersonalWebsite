@@ -3,6 +3,13 @@ import { Download } from "lucide-react";
 
 const roles = [
   {
+    company: "Pivot North Capital",
+    role: "Incoming Intern",
+    dates: "Summer 2026",
+    description:
+      "Working with Tim Connors (2x Midas List) and Hannah Dopico to invest in the next generation of unicorn founders.",
+  },
+  {
     company: "Notre Dame Venture Capital",
     role: "General Partner",
     dates: "Jan 2026 – Present",

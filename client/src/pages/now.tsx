@@ -10,39 +10,35 @@ const FALLBACK: NowData = {
     {
       label: "Reading",
       items: [
-        { title: "Perelandra", sub: "C.S. Lewis — deep in the Space Trilogy" },
-        { title: "The Three-Body Problem", sub: "Liu Cixin — halfway through, feel genuinely unsettled" },
+        { title: "Blitzscaling", sub: "Startup book on hyper growth" },
+        { title: "Les Misérables", sub: "Amazing exploration of sacrifice and mercy" },
       ],
     },
     {
       label: "Building",
       items: [
-        { title: "This website", sub: "learning to code by doing" },
-        { title: "ND Venture Capital", sub: "sourcing B2B Vertical AI deals, building the thesis" },
-        { title: "Intercollegiate VC event", sub: "first of its kind at Notre Dame" },
+        { title: "Ideating", sub: "trying to build an MVP for an idea this summer w a few talented friends" },
+        { title: "ND Venture Capital", sub: "sourcing two possible investments in mining and manufacturing" },
       ],
     },
     {
       label: "Thinking about",
       items: [
-        { title: "What makes a founder worth betting on early", sub: "before product, before traction" },
-        { title: "How homeschooling shaped the way I learn", sub: "still processing this one" },
-        { title: "Frassati's idea of living vs. existing", sub: "trying to take it seriously" },
+        { title: "What makes a founder worth betting on", sub: "before product, before traction" },
       ],
     },
     {
       label: "Listening to",
       items: [
-        { title: "A lot of piano", sub: "Keith Jarrett, Brad Mehldau, Glenn Gould" },
-        { title: "Whatever helps me focus", sub: "changes weekly" },
+        { title: "A lot of piano, country, and pop", sub: "Joe Hisaishi, Piano Guys, Luke Combs, Ed Sheeran" },
       ],
     },
     {
       label: "Outside",
       items: [
         { title: "Chess", sub: "losing more than I'd like to admit" },
-        { title: "Rock climbing when I can get to a wall", sub: "" },
-        { title: "Skiing whenever there's snow", sub: "" },
+        { title: "Pickleball", sub: "Newly hooked" },
+        { title: "Guitar", sub: "Can barely play but want to learn Hey There Delilah" },
       ],
     },
   ],
