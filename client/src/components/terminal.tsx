@@ -9,9 +9,7 @@ const COMMANDS: Record<string, { description: string; action?: string }> = {
   writing:  { description: "things I've written",    action: "/journal" },
   books:    { description: "what I'm reading",       action: "/about#books" },
   contact:  { description: "get in touch",           action: "/contact" },
-  universe:     { description: "open the constellation",        action: "/universe" },
-  wunderkammer: { description: "open the cabinet of curiosities", action: "/wunderkammer" },
-  now:          { description: "what I'm doing right now",   action: "/now" },
+  now:          { description: "what I'm doing right now", action: "/now" },
   piano:        { description: "open the keyboard piano",  action: "PIANO" },
   clear:        { description: "clear the terminal" },
 };
