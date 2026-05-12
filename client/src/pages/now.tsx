@@ -5,7 +5,7 @@ import type { NowData } from "../../../server/now-sheet";
 
 // Static fallback — shown if the sheet isn't configured yet
 const FALLBACK: NowData = {
-  lastUpdated: "March 2026",
+  lastUpdated: "April 2026",
   sections: [
     {
       label: "Reading",

@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Link, useLocation } from "wouter";
 import { Menu, X } from "lucide-react";
 import { motion, AnimatePresence, useScroll, useMotionValueEvent } from "framer-motion";
+import { ThemeToggle } from "@/components/theme-toggle";
 
 const navLinks = [
   { href: "/about", label: "About" },
@@ -26,16 +27,98 @@ export function Navigation() {
 
   return (
     <>
-      {/* Fixed header — transparent on hero, minimal after scroll */}
+      {/* Desktop sidebar — fixed left panel */}
+      <aside
+        className="hidden md:flex fixed top-0 left-0 bottom-0 w-48 z-50 flex-col py-10 px-5"
+        style={{
+          background: "hsl(var(--sidebar))",
+          borderRight: "1px solid hsl(var(--sidebar-border))",
+        }}
+      >
+        <Link
+          href="/"
+          className="font-serif font-semibold text-xl tracking-wide mb-10 block"
+          style={{ color: "hsl(var(--sidebar-foreground))" }}
+          data-testid="link-home"
+        >
+          JD
+        </Link>
+
+        <nav className="flex flex-col gap-0.5">
+          {navLinks.map((link) => (
+            <Link
+              key={link.href}
+              href={link.href}
+              className="py-2 px-2 rounded-md text-sm transition-colors block"
+              style={{
+                color: location === link.href
+                  ? "hsl(var(--sidebar-foreground))"
+                  : "hsl(var(--muted-foreground))",
+                background: location === link.href
+                  ? "hsl(var(--sidebar-accent))"
+                  : "transparent",
+                fontWeight: location === link.href ? 500 : 400,
+              }}
+              data-testid={`link-${link.label.toLowerCase()}`}
+            >
+              {link.label}
+            </Link>
+          ))}
+        </nav>
+
+        {/* Sidebar footer */}
+        <div className="mt-auto space-y-1">
+          {/* Theme toggle + terminal */}
+          <div className="flex items-center gap-1">
+            <ThemeToggle />
+            <button
+              onClick={() => window.dispatchEvent(new CustomEvent("open-terminal"))}
+              className="flex items-center gap-2 hover:opacity-80 transition-opacity text-left rounded-md px-2 py-2"
+              style={{
+                color: "hsl(var(--muted-foreground))",
+                background: "none",
+                border: "none",
+                cursor: "pointer",
+              }}
+            >
+              <span className="font-mono text-xs">&gt;_</span>
+              <span className="text-xs tracking-wider">terminal</span>
+            </button>
+          </div>
+
+          {/* Social links */}
+          <div className="flex flex-wrap gap-x-3 gap-y-1 px-2 pt-1">
+            {[
+              { label: "Substack", href: "https://substack.com/@josephdiener" },
+              { label: "LinkedIn", href: "https://linkedin.com/in/josephpdiener" },
+              { label: "X", href: "https://x.com/Joseph__Diener" },
+              { label: "GitHub", href: "https://github.com/JPDIEN" },
+            ].map(s => (
+              <a
+                key={s.label}
+                href={s.href}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-xs transition-colors hover:text-foreground"
+                style={{ color: "hsl(var(--muted-foreground))", opacity: 0.6 }}
+              >
+                {s.label}
+              </a>
+            ))}
+          </div>
+        </div>
+      </aside>
+
+      {/* Mobile header */}
       <header
-        className="fixed top-0 left-0 right-0 z-50 transition-all duration-500"
+        className="md:hidden fixed top-0 left-0 right-0 z-50 transition-all duration-500"
         style={{
           background: transparent ? "transparent" : "rgba(255,255,255,0.85)",
           backdropFilter: transparent ? "none" : "blur(12px)",
           borderBottom: transparent ? "none" : "1px solid rgba(0,0,0,0.06)",
         }}
       >
-        <div className="flex items-center justify-between px-6 md:px-10 h-14">
+        <div className="flex items-center justify-between px-6 h-14">
           <Link
             href="/"
             className="font-serif font-semibold text-lg tracking-wide transition-colors"
@@ -57,7 +140,7 @@ export function Navigation() {
         </div>
       </header>
 
-      {/* Full-screen drawer */}
+      {/* Mobile full-screen drawer */}
       <AnimatePresence>
         {open && (
           <>
@@ -67,7 +150,7 @@ export function Navigation() {
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               transition={{ duration: 0.3 }}
-              className="fixed inset-0 z-50 bg-black/40"
+              className="fixed inset-0 z-50 bg-black/40 md:hidden"
               onClick={() => setOpen(false)}
             />
 
@@ -77,7 +160,7 @@ export function Navigation() {
               animate={{ x: 0 }}
               exit={{ x: "100%" }}
               transition={{ type: "tween", duration: 0.35, ease: [0.32, 0, 0.67, 0] }}
-              className="fixed top-0 right-0 bottom-0 z-50 w-72 flex flex-col"
+              className="fixed top-0 right-0 bottom-0 z-50 w-72 flex flex-col md:hidden"
               style={{
                 background: "#0f0f0f",
                 borderLeft: "1px solid rgba(255,255,255,0.06)",
@@ -108,7 +191,7 @@ export function Navigation() {
                       onClick={() => setOpen(false)}
                       className="block py-3 font-serif text-2xl transition-colors"
                       style={{
-                        color: location === link.href ? "rgba(255,255,255,1)" : "rgba(255,255,255,0.45)",
+                        color: location === link.href ? "rgba(255,255,255,1)" : "rgba(255,255,255,0.6)",
                       }}
                       data-testid={`link-${link.label.toLowerCase()}`}
                     >
@@ -127,7 +210,7 @@ export function Navigation() {
                     setTimeout(() => window.dispatchEvent(new CustomEvent("open-terminal")), 200);
                   }}
                   className="flex items-center gap-2 transition-opacity hover:opacity-70"
-                  style={{ color: "rgba(255,255,255,0.25)", background: "none", border: "none", padding: 0, cursor: "pointer" }}
+                  style={{ color: "rgba(255,255,255,0.45)", background: "none", border: "none", padding: 0, cursor: "pointer" }}
                 >
                   <span className="font-mono text-xs tracking-widest">&gt;_</span>
                   <span className="text-xs tracking-wider">terminal</span>
@@ -146,7 +229,7 @@ export function Navigation() {
                       target="_blank"
                       rel="noopener noreferrer"
                       className="text-xs tracking-wider transition-colors"
-                      style={{ color: "rgba(255,255,255,0.35)" }}
+                      style={{ color: "rgba(255,255,255,0.5)" }}
                     >
                       {s.label}
                     </a>

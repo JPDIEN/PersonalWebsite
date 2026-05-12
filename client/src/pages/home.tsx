@@ -44,7 +44,7 @@ export default function Home() {
   if (!show) return null;
 
   return (
-    <div className="min-h-screen flex flex-col justify-center px-8 md:px-16 pt-28 pb-16">
+    <div className="min-h-screen flex flex-col justify-center px-8 md:px-16 pt-28 md:pt-0 pb-16">
       <div className="max-w-2xl">
 
         {/* Name */}
@@ -53,7 +53,7 @@ export default function Home() {
           animate={{ opacity: 1 }}
           transition={{ duration: 0.6 }}
           className="text-xs tracking-[0.22em] uppercase mb-10"
-          style={{ color: "var(--muted-foreground)", opacity: 0.45 }}
+          style={{ color: "var(--muted-foreground)", opacity: 0.72 }}
         >
           Joseph Diener
         </motion.p>
@@ -101,7 +101,7 @@ export default function Home() {
           <div className="h-px w-8 bg-current opacity-20" />
           <p
             className="text-sm font-serif italic"
-            style={{ color: "var(--muted-foreground)", opacity: 0.45 }}
+            style={{ color: "var(--muted-foreground)", opacity: 0.72 }}
           >
             "We must never just exist, but live." — Pier Giorgio Frassati
           </p>
@@ -112,9 +112,9 @@ export default function Home() {
       {/* Terminal hint — tappable on mobile, keyboard hint on desktop */}
       <motion.button
         initial={{ opacity: 0 }}
-        animate={{ opacity: 0.3 }}
+        animate={{ opacity: 0.72 }}
         transition={{ delay: 3, duration: 1 }}
-        whileHover={{ opacity: 0.6 }}
+        whileHover={{ opacity: 1 }}
         onClick={() => window.dispatchEvent(new CustomEvent("open-terminal"))}
         className="fixed bottom-7 right-8 text-xs font-mono cursor-pointer"
         style={{ color: "var(--muted-foreground)", background: "none", border: "none", padding: 0 }}
