@@ -39,3 +39,9 @@ live network at runtime); #4 is the runner-up if DealDesk hits a wall.
 **Stack decision:** Python 3.11 stdlib only (sqlite3, csv, json, argparse, http.server,
 unittest). Zero pip installs means zero dependency risk unattended, and the whole thing
 stays runnable anywhere with `python3`.
+
+## 2026-08-05 03:15 UTC — Phase 2: Plan + scaffold
+
+Milestones written to TODO.md (M1 ingest/store → M2 scoring → M3 pipeline → M4 report →
+M5 dashboard → M6 polish), ordered so M1 alone is already useful. Scaffolded package
+layout: `dealdesk/` (modules), `tests/` (unittest), `sample_data/`. README stub written.
