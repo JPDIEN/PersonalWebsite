@@ -45,3 +45,14 @@ stays runnable anywhere with `python3`.
 Milestones written to TODO.md (M1 ingest/store → M2 scoring → M3 pipeline → M4 report →
 M5 dashboard → M6 polish), ordered so M1 alone is already useful. Scaffolded package
 layout: `dealdesk/` (modules), `tests/` (unittest), `sample_data/`. README stub written.
+
+## 2026-08-05 03:30 UTC — M1 complete: ingest + store
+
+Built `normalize.py` (name/domain canonicalization), `db.py` (SQLite schema: deals,
+notes, events), `ingest.py` (flexible header aliasing, dedupe by domain-then-name,
+fill-only merge that never overwrites existing data, unmapped columns preserved in an
+`extra` JSON column), and the CLI with `ingest` and `list` subcommands.
+
+Verified: 27 unit tests pass (`python3 -m unittest discover -s tests`); manual smoke run
+ingested a 3-row CSV with a deliberate duplicate → "added 2, merged 1, skipped 0",
+`list` renders the table, missing-file path exits 1 with a clean message.

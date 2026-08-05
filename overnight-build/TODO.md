@@ -2,7 +2,7 @@
 
 Each milestone ends in a working, tested, committed state.
 
-- [ ] **M1 — Ingest + store** (est. 60m): `python3 -m dealdesk ingest <csv>` with flexible
+- [x] **M1 — Ingest + store** (est. 60m): `python3 -m dealdesk ingest <csv>` with flexible
       column mapping, name/domain normalization, dedupe on re-ingest; SQLite storage;
       `list` command showing the pipeline. Shippable on its own.
 - [ ] **M2 — Thesis scoring** (est. 45m): `thesis.json` with weighted rules (sector
