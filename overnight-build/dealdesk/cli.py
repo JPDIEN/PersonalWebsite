@@ -220,6 +220,17 @@ def cmd_report(args: argparse.Namespace) -> int:
     return 0
 
 
+def cmd_serve(args: argparse.Namespace) -> int:
+    from .server import serve  # imported lazily; not needed for CLI-only use
+    try:
+        serve(args.db, host=args.host, port=args.port)
+    except OSError as e:
+        print(f"error: can't bind {args.host}:{args.port} ({e.strerror}); "
+              f"try --port with a different number", file=sys.stderr)
+        return 1
+    return 0
+
+
 def cmd_init_thesis(args: argparse.Namespace) -> int:
     path = args.path
     if os.path.exists(path) and not args.force:
@@ -293,6 +304,11 @@ def build_parser() -> argparse.ArgumentParser:
     sp.add_argument("-o", "--output", metavar="FILE",
                     help="write to a file instead of stdout")
     sp.set_defaults(func=cmd_report)
+
+    sp = sub.add_parser("serve", help="run the local web dashboard")
+    sp.add_argument("--host", default="127.0.0.1")
+    sp.add_argument("--port", type=int, default=8756)
+    sp.set_defaults(func=cmd_serve)
 
     sp = sub.add_parser("init-thesis", help="write a starter thesis.json to edit")
     sp.add_argument("path", nargs="?", default="thesis.json",

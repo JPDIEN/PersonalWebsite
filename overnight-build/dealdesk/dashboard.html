@@ -1,0 +1,232 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>DealDesk</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Ctext y='13' font-size='13'%3E%F0%9F%93%88%3C/text%3E%3C/svg%3E">
+<style>
+  :root {
+    --bg: #0f1115; --panel: #171a21; --panel2: #1e222b; --text: #e6e9ef;
+    --muted: #8b93a3; --line: #2a2f3a; --accent: #5aa7ff; --good: #4cc38a;
+    --warn: #e5a50a; --bad: #e5534b;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--text);
+         font: 14px/1.5 -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; }
+  header { display: flex; align-items: baseline; gap: 16px; padding: 18px 24px;
+           border-bottom: 1px solid var(--line); }
+  header h1 { font-size: 18px; margin: 0; letter-spacing: .3px; }
+  header .sub { color: var(--muted); font-size: 13px; }
+  main { max-width: 1100px; margin: 0 auto; padding: 20px 24px 60px; }
+  .chips { display: flex; flex-wrap: wrap; gap: 8px; margin: 4px 0 18px; }
+  .chip { background: var(--panel); border: 1px solid var(--line); border-radius: 999px;
+          padding: 5px 12px; cursor: pointer; color: var(--muted); }
+  .chip b { color: var(--text); margin-left: 6px; }
+  .chip.active { border-color: var(--accent); color: var(--text); }
+  .todo { background: var(--panel); border: 1px solid var(--line); border-radius: 10px;
+          padding: 12px 16px; margin-bottom: 18px; }
+  .todo h2 { margin: 0 0 6px; font-size: 13px; text-transform: uppercase;
+             letter-spacing: .8px; color: var(--muted); }
+  .todo .item { padding: 2px 0; }
+  .todo .due { color: var(--warn); }
+  .todo .stale { color: var(--muted); }
+  table { width: 100%; border-collapse: collapse; }
+  th { text-align: left; color: var(--muted); font-weight: 500; font-size: 12px;
+       text-transform: uppercase; letter-spacing: .6px; padding: 8px 10px;
+       border-bottom: 1px solid var(--line); cursor: pointer; user-select: none; }
+  td { padding: 9px 10px; border-bottom: 1px solid var(--line); vertical-align: top; }
+  tr.row { cursor: pointer; }
+  tr.row:hover td { background: var(--panel); }
+  .score { font-variant-numeric: tabular-nums; font-weight: 600; }
+  .score.hi { color: var(--good); } .score.mid { color: var(--warn); }
+  .score.lo { color: var(--muted); }
+  .stagepill { display: inline-block; font-size: 12px; padding: 2px 9px;
+               border-radius: 999px; background: var(--panel2);
+               border: 1px solid var(--line); color: var(--muted); }
+  .detail td { background: var(--panel); }
+  .detail .inner { display: grid; grid-template-columns: 1.2fr .8fr; gap: 18px;
+                   padding: 6px 2px; }
+  @media (max-width: 760px) { .detail .inner { grid-template-columns: 1fr; } }
+  .detail h3 { margin: 0 0 6px; font-size: 13px; color: var(--muted);
+               text-transform: uppercase; letter-spacing: .6px; }
+  .rule { display: flex; gap: 8px; align-items: baseline; padding: 1px 0; }
+  .rule .w { color: var(--muted); font-variant-numeric: tabular-nums; min-width: 26px; }
+  .rule.hit .lbl { color: var(--good); }
+  .rule.miss .lbl { color: var(--muted); }
+  .veto { color: var(--bad); font-weight: 600; }
+  .meta div { padding: 1px 0; } .meta .k { color: var(--muted); }
+  select, input[type=text], button {
+    background: var(--panel2); color: var(--text); border: 1px solid var(--line);
+    border-radius: 7px; padding: 6px 10px; font: inherit; }
+  button { cursor: pointer; } button:hover { border-color: var(--accent); }
+  .noteform { display: flex; gap: 8px; margin-top: 8px; }
+  .noteform input { flex: 1; }
+  .notes .n { padding: 2px 0; } .notes .d { color: var(--muted); font-size: 12px; }
+  .empty { color: var(--muted); padding: 30px 0; text-align: center; }
+  #err { position: fixed; bottom: 16px; left: 50%; transform: translateX(-50%);
+         background: var(--bad); color: #fff; padding: 8px 16px; border-radius: 8px;
+         display: none; }
+</style>
+</head>
+<body>
+<header>
+  <h1>DealDesk</h1>
+  <span class="sub" id="summary"></span>
+</header>
+<main>
+  <div class="chips" id="chips"></div>
+  <div class="todo" id="todo" hidden></div>
+  <table>
+    <thead><tr>
+      <th data-k="name">Company</th><th data-k="score">Score</th>
+      <th data-k="stage">Stage</th><th data-k="sector">Sector</th>
+      <th data-k="round">Round</th><th data-k="location">Location</th>
+    </tr></thead>
+    <tbody id="rows"></tbody>
+  </table>
+  <div class="empty" id="empty" hidden>No deals yet — run <code>dealdesk ingest your.csv</code></div>
+</main>
+<div id="err"></div>
+<script>
+"use strict";
+let DATA = { deals: [], stages: [] };
+let filter = null, sortKey = "score", sortDir = -1, openId = null;
+
+const $ = (s) => document.querySelector(s);
+const esc = (s) => String(s ?? "").replace(/[&<>"']/g,
+  c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+
+function showErr(msg) {
+  const el = $("#err"); el.textContent = msg; el.style.display = "block";
+  setTimeout(() => el.style.display = "none", 4000);
+}
+
+async function api(path, opts) {
+  const r = await fetch(path, opts);
+  const body = await r.json().catch(() => ({}));
+  if (!r.ok) throw new Error(body.error || r.statusText);
+  return body;
+}
+
+async function load() {
+  DATA = await api("/api/deals");
+  const t = await api("/api/todo");
+  renderTodo(t); render();
+}
+
+function renderTodo(t) {
+  const el = $("#todo");
+  const items = [];
+  for (const d of t.due) items.push(
+    `<div class="item due">⚑ #${d.id} ${esc(d.name)} — follow-up due ${esc(d.follow_up)}</div>`);
+  for (const d of t.stale) items.push(
+    `<div class="item stale">◌ #${d.id} ${esc(d.name)} — untouched since ${esc((d.updated_at||"").slice(0,10))}</div>`);
+  el.hidden = items.length === 0;
+  el.innerHTML = "<h2>Needs attention</h2>" + items.join("");
+}
+
+function scoreClass(s) { return s == null ? "lo" : s >= 60 ? "hi" : s >= 30 ? "mid" : "lo"; }
+
+function render() {
+  const counts = {};
+  for (const d of DATA.deals) counts[d.stage] = (counts[d.stage] || 0) + 1;
+  $("#summary").textContent = `${DATA.deals.length} deals tracked`;
+  $("#chips").innerHTML =
+    [`<span class="chip ${filter===null?"active":""}" data-s="">All<b>${DATA.deals.length}</b></span>`]
+    .concat(DATA.stages.map(s =>
+      `<span class="chip ${filter===s?"active":""}" data-s="${s}">${s}<b>${counts[s]||0}</b></span>`))
+    .join("");
+
+  let deals = DATA.deals.filter(d => !filter || d.stage === filter);
+  deals.sort((a, b) => {
+    let va = a[sortKey], vb = b[sortKey];
+    if (sortKey === "score") { va = va ?? -1; vb = vb ?? -1; return (va - vb) * sortDir; }
+    return String(va ?? "").localeCompare(String(vb ?? "")) * sortDir;
+  });
+
+  $("#empty").hidden = deals.length > 0;
+  $("#rows").innerHTML = deals.map(d => {
+    const s = d.score == null ? "—" : d.score.toFixed(0);
+    let html = `<tr class="row" data-id="${d.id}">
+      <td><b>${esc(d.name)}</b>${d.description ? `<div style="color:var(--muted)">${esc(d.description)}</div>` : ""}</td>
+      <td class="score ${scoreClass(d.score)}">${s}</td>
+      <td><span class="stagepill">${esc(d.stage)}</span></td>
+      <td>${esc(d.sector)}</td><td>${esc(d.round)}</td><td>${esc(d.location)}</td></tr>`;
+    if (openId === d.id) html += detailRow(d);
+    return html;
+  }).join("");
+}
+
+function detailRow(d) {
+  const det = d.score_detail || {};
+  const rules = (det.rules || []).map(r =>
+    `<div class="rule ${r.matched ? "hit" : "miss"}">
+       <span class="w">${r.weight}</span><span class="lbl">${esc(r.label)}</span>
+       ${r.matched ? `<span style="color:var(--muted)">— '${esc(r.term)}'</span>` : ""}
+     </div>`).join("") || "<div style='color:var(--muted)'>Not scored yet — run <code>dealdesk score</code></div>";
+  const veto = det.veto ?
+    `<div class="veto">VETO — ${esc(det.veto.label)}: '${esc(det.veto.term)}'</div>` : "";
+  const meta = [["Domain", d.domain], ["Founders", d.founders], ["Raising", d.raise_amount],
+                ["Source", d.source], ["Follow-up", d.follow_up]]
+    .filter(([, v]) => v)
+    .map(([k, v]) => `<div><span class="k">${k}:</span> ${esc(v)}</div>`).join("");
+  const notes = (d.notes || []).map(n =>
+    `<div class="n"><span class="d">${esc(n.created_at.slice(0, 10))}</span> ${esc(n.body)}</div>`).join("");
+  const opts = DATA.stages.map(s =>
+    `<option value="${s}" ${s === d.stage ? "selected" : ""}>${s}</option>`).join("");
+  return `<tr class="detail"><td colspan="6"><div class="inner">
+    <div><h3>Score breakdown</h3>${veto}${rules}
+      <div class="noteform">
+        <input type="text" id="notein" placeholder="Add a note…">
+        <button data-note="${d.id}">Save</button>
+      </div>
+      <div class="notes">${notes}</div>
+    </div>
+    <div class="meta"><h3>Details</h3>${meta || "<div class='k'>—</div>"}
+      <div style="margin-top:10px"><span class="k">Stage:</span>
+        <select data-move="${d.id}">${opts}</select></div>
+    </div>
+  </div></td></tr>`;
+}
+
+document.addEventListener("click", async (e) => {
+  const chip = e.target.closest(".chip");
+  if (chip) { filter = chip.dataset.s || null; render(); return; }
+  const th = e.target.closest("th");
+  if (th) {
+    const k = th.dataset.k;
+    if (k === sortKey) sortDir *= -1; else { sortKey = k; sortDir = k === "score" ? -1 : 1; }
+    render(); return;
+  }
+  const noteBtn = e.target.closest("[data-note]");
+  if (noteBtn) {
+    const body = $("#notein").value.trim();
+    if (!body) return;
+    try {
+      await api(`/api/deals/${noteBtn.dataset.note}/note`,
+        { method: "POST", headers: {"Content-Type": "application/json"},
+          body: JSON.stringify({ body }) });
+      await load();
+    } catch (err) { showErr(err.message); }
+    return;
+  }
+  const row = e.target.closest("tr.row");
+  if (row) { const id = +row.dataset.id; openId = openId === id ? null : id; render(); }
+});
+
+document.addEventListener("change", async (e) => {
+  const sel = e.target.closest("[data-move]");
+  if (!sel) return;
+  try {
+    await api(`/api/deals/${sel.dataset.move}/stage`,
+      { method: "POST", headers: {"Content-Type": "application/json"},
+        body: JSON.stringify({ stage: sel.value }) });
+    await load();
+  } catch (err) { showErr(err.message); }
+});
+
+load().catch(err => showErr("Failed to load: " + err.message));
+</script>
+</body>
+</html>

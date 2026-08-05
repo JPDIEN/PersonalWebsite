@@ -86,3 +86,19 @@ of inbox, stage changes, needs-attention (due + stale), and passed-this-period. 
 
 Verified: 61 tests pass; smoke report over the demo DB renders every section with
 correct counts and the overdue follow-up surfaced under Needs attention.
+
+## 2026-08-05 04:45 UTC — M5 complete: local web dashboard
+
+Built `server.py` (stdlib ThreadingHTTPServer: GET /, /api/deals, /api/todo; POST
+stage/note endpoints with 400/404 handling) and `dashboard.html` (vanilla JS single
+page: stage-filter chips, sortable table, needs-attention panel, expandable rows with
+score breakdown, inline stage select and note form). CLI grew `serve --host --port`.
+
+Verified: 70 tests pass (9 server tests over a live threaded instance on an ephemeral
+port). Headless Chromium (Playwright) loaded the page, expanded a row, moved a deal
+inbox → reviewing via the dropdown, filtered by chip — zero JS/console errors after
+adding an inline favicon. Screenshot saved to docs/dashboard.png.
+
+Ops note: a pkill meant for the demo server matched its own shell and killed the first
+commit attempt; recommitted. Also noticed __pycache__ had slipped into earlier commits —
+added overnight-build/.gitignore and untracked it.

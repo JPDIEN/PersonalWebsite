@@ -13,7 +13,7 @@ Each milestone ends in a working, tested, committed state.
       overdue follow-ups.
 - [x] **M4 — Weekly review report** (est. 30m): `report` command → markdown file: new
       this week, top-scored inbox, stage changes, stale deals, pass log.
-- [ ] **M5 — Local web dashboard** (est. 60m): `serve` command → stdlib http.server
+- [x] **M5 — Local web dashboard** (est. 60m): `serve` command → stdlib http.server
       dashboard: pipeline board, sortable deal table, score breakdown per deal, stage
       moves via POST. Verified with scripted HTTP checks (+ headless browser if easy).
 - [ ] **M6 — Sample data + polish** (est. 30m): realistic bundled sample CSV + demo
