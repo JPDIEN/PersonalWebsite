@@ -112,3 +112,29 @@ worked-example epilog on `--help`.
 
 Verified: full demo pipeline run — 10 added, then 2 added + 2 merged across dialects,
 12 scored with a clean 0–100 spread (Perch 100, gambling veto 0). 70 tests still green.
+
+## 2026-08-05 05:20 UTC — Phases 4–5: verification + packaging
+
+Fresh end-to-end verification run recorded in VERIFICATION.md: 70/70 tests, demo.sh full
+pipeline (10 added → 2 added + 2 merged → 12 scored 0–100 with veto), headless-Chromium
+dashboard pass with zero JS errors, screenshot refreshed with the 12-deal dataset.
+README finalized (pitch, 30-second demo, thesis format docs). STATUS.md finalized with
+verified/partial/cut/known-issues/next-steps. BRIEF.md skipped deliberately — this is a
+personal tool, not a company idea.
+
+Backlog check against the brief: extra tests/edge cases (done throughout — 70 tests),
+second real feature (dashboard + report both shipped beyond core), sample dataset (done),
+--help + error messages (done), refactor pass (code reviewed as written; modules are
+small and single-purpose), launch blurb (below, since it's shareable).
+
+Launch blurb: "I let Claude build overnight and woke up to DealDesk: a zero-dependency,
+local-first deal-flow tool. Feed it messy startup CSVs from anywhere; it dedupes them,
+scores every company against a thesis you write in JSON (with full per-rule
+explanations, no black box), tracks your pipeline, writes your weekly review, and serves
+a dashboard — all Python stdlib, one SQLite file, `sh demo.sh` to see it in 30 seconds."
+
+## 2026-08-05 05:25 UTC — End
+
+Definition of Done met: all 6 milestones built, tested, verified; README/STATUS/
+BUILD_LOG/VERIFICATION accurate; demo.sh (the README run command) exercised end to end;
+tree clean; every commit left the suite green.
