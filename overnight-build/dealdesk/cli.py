@@ -249,6 +249,17 @@ def build_parser() -> argparse.ArgumentParser:
         prog="dealdesk",
         description="Local-first deal-flow pipeline: ingest company CSVs, score them "
                     "against your thesis, and manage your pipeline.",
+        epilog="typical week:\n"
+               "  dealdesk ingest demo_day.csv --source 'demo day'\n"
+               "  dealdesk init-thesis && $EDITOR thesis.json\n"
+               "  dealdesk score\n"
+               "  dealdesk list --top 10\n"
+               "  dealdesk move 3 meeting --note 'intro call Thursday'\n"
+               "  dealdesk followup 3 +1w\n"
+               "  dealdesk todo\n"
+               "  dealdesk report -o weekly.md\n"
+               "  dealdesk serve        # dashboard at http://127.0.0.1:8756\n",
+        formatter_class=argparse.RawDescriptionHelpFormatter,
     )
     p.add_argument("--db", metavar="PATH",
                    help="SQLite database file (default: $DEALDESK_DB or ./dealdesk.db)")

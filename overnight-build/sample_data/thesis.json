@@ -1,0 +1,22 @@
+{
+  "name": "Midwest early-stage B2B",
+  "rules": [
+    {"label": "Core sectors", "field": "sector", "weight": 30,
+     "match": ["fintech", "ai", "developer tools", "b2b saas", "saas", "logistics",
+               "robotics", "agtech"]},
+    {"label": "Stage fit (pre-seed/seed)", "field": "round", "weight": 25,
+     "match": ["pre-seed", "preseed", "seed"]},
+    {"label": "Midwest geography", "field": "location", "weight": 20,
+     "match": ["chicago", "detroit", "indiana", "indianapolis", "south bend",
+               "ohio", "columbus", "michigan", "ann arbor", "milwaukee",
+               "minneapolis", "midwest", "il", "in", "oh", "mi", "wi", "mn"]},
+    {"label": "B2B / recurring model", "field": "any", "weight": 15,
+     "match": ["saas", "api", "marketplace", "recurring revenue", "b2b"]},
+    {"label": "Traction signals", "field": "any", "weight": 10,
+     "match": ["arr", "revenue", "pilot", "pilots", "customers", "paid"]}
+  ],
+  "vetoes": [
+    {"label": "Out of scope", "field": "any",
+     "match": ["gambling", "tobacco", "weapons"]}
+  ]
+}

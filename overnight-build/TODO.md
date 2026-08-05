@@ -16,7 +16,7 @@ Each milestone ends in a working, tested, committed state.
 - [x] **M5 — Local web dashboard** (est. 60m): `serve` command → stdlib http.server
       dashboard: pipeline board, sortable deal table, score breakdown per deal, stage
       moves via POST. Verified with scripted HTTP checks (+ headless browser if easy).
-- [ ] **M6 — Sample data + polish** (est. 30m): realistic bundled sample CSV + demo
+- [x] **M6 — Sample data + polish** (est. 30m): realistic bundled sample CSV + demo
       thesis so the demo is instant; helpful `--help`; clean error messages.
 
 Backlog (post-DoD, pull if time remains): more edge-case tests, CSV export, screenshot

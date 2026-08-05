@@ -102,3 +102,13 @@ adding an inline favicon. Screenshot saved to docs/dashboard.png.
 Ops note: a pkill meant for the demo server matched its own shell and killed the first
 commit attempt; recommitted. Also noticed __pycache__ had slipped into earlier commits —
 added overnight-build/.gitignore and untracked it.
+
+## 2026-08-05 05:00 UTC — M6 complete: sample data + polish
+
+Added `sample_data/` (demo_day.csv with 10 fictional companies incl. a veto case and
+varied header names; referrals.csv with 4 rows, 2 of which are deliberate duplicates in a
+different header dialect; thesis.json tuned to the data), a one-command `demo.sh`, and a
+worked-example epilog on `--help`.
+
+Verified: full demo pipeline run — 10 added, then 2 added + 2 merged across dialects,
+12 scored with a clean 0–100 spread (Perch 100, gambling veto 0). 70 tests still green.
