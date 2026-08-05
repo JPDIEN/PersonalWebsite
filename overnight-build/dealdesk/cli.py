@@ -9,6 +9,7 @@ import sys
 
 from . import db as dbmod
 from .ingest import ingest_csv
+from .pipeline import PipelineError, add_note, move, set_followup, todo
 from .scoring import TEMPLATE, ThesisError, load_thesis, score_all
 
 
@@ -137,6 +138,74 @@ def cmd_show(args: argparse.Namespace) -> int:
     return 0
 
 
+def _with_pipeline(args, fn) -> int:
+    conn = dbmod.connect(args.db)
+    try:
+        fn(conn)
+        return 0
+    except PipelineError as e:
+        print(f"error: {e}", file=sys.stderr)
+        return 1
+    finally:
+        conn.close()
+
+
+def cmd_move(args: argparse.Namespace) -> int:
+    def run(conn):
+        old, new = move(conn, args.id, args.stage)
+        if args.note:
+            add_note(conn, args.id, args.note)
+        print(f"#{args.id}: {old} -> {new}" if old != new
+              else f"#{args.id}: already in {new}")
+    return _with_pipeline(args, run)
+
+
+def cmd_note(args: argparse.Namespace) -> int:
+    def run(conn):
+        add_note(conn, args.id, args.text)
+        print(f"#{args.id}: note added")
+    return _with_pipeline(args, run)
+
+
+def cmd_followup(args: argparse.Namespace) -> int:
+    def run(conn):
+        iso = set_followup(conn, args.id, None if args.clear else args.when)
+        print(f"#{args.id}: follow-up cleared" if iso is None
+              else f"#{args.id}: follow-up set for {iso}")
+    if not args.clear and not args.when:
+        print("error: give a date (YYYY-MM-DD, +Nd, +Nw) or --clear", file=sys.stderr)
+        return 1
+    return _with_pipeline(args, run)
+
+
+def _todo_line(d: dict) -> str:
+    bits = [f"#{d['id']} {d['name']} [{d['stage']}]"]
+    if d.get("follow_up"):
+        bits.append(f"due {d['follow_up']}")
+    return "  " + "  ".join(bits)
+
+
+def cmd_todo(args: argparse.Namespace) -> int:
+    conn = dbmod.connect(args.db)
+    view = todo(conn)
+    conn.close()
+    sections = [("Due now", view["due"]),
+                ("Upcoming follow-ups", view["upcoming"]),
+                (f"Stale (no touch in 14+ days)", view["stale"])]
+    any_items = False
+    for title, items in sections:
+        if not items:
+            continue
+        any_items = True
+        print(f"{title}:")
+        for d in items:
+            print(_todo_line(d))
+        print()
+    if not any_items:
+        print("Nothing due, nothing stale. Inbox zero.")
+    return 0
+
+
 def cmd_init_thesis(args: argparse.Namespace) -> int:
     path = args.path
     if os.path.exists(path) and not args.force:
@@ -183,6 +252,26 @@ def build_parser() -> argparse.ArgumentParser:
     sp = sub.add_parser("show", help="show one deal in full, with score breakdown")
     sp.add_argument("id", type=int, help="deal id (from 'list')")
     sp.set_defaults(func=cmd_show)
+
+    sp = sub.add_parser("move", help="move a deal to another pipeline stage")
+    sp.add_argument("id", type=int)
+    sp.add_argument("stage", help=f"one of: {', '.join(dbmod.PIPELINE_STAGES)}")
+    sp.add_argument("--note", help="attach a note explaining the move")
+    sp.set_defaults(func=cmd_move)
+
+    sp = sub.add_parser("note", help="add a note to a deal")
+    sp.add_argument("id", type=int)
+    sp.add_argument("text")
+    sp.set_defaults(func=cmd_note)
+
+    sp = sub.add_parser("followup", help="set or clear a follow-up date")
+    sp.add_argument("id", type=int)
+    sp.add_argument("when", nargs="?", help="YYYY-MM-DD, +Nd, or +Nw")
+    sp.add_argument("--clear", action="store_true", help="clear the follow-up")
+    sp.set_defaults(func=cmd_followup)
+
+    sp = sub.add_parser("todo", help="what needs attention: due follow-ups, stale deals")
+    sp.set_defaults(func=cmd_todo)
 
     sp = sub.add_parser("init-thesis", help="write a starter thesis.json to edit")
     sp.add_argument("path", nargs="?", default="thesis.json",

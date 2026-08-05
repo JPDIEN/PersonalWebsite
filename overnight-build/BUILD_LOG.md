@@ -67,3 +67,13 @@ human-readable errors.
 
 Verified: 41 tests pass; smoke run scored the demo DB (Fastline 45.0 via stage+geo
 matches, Loamly 25.0), `list --top` ranks by score, `show 2` prints the breakdown.
+
+## 2026-08-05 04:00 UTC — M3 complete: pipeline management
+
+Built `pipeline.py`: stage moves with event logging (no-op when already there), notes,
+follow-up dates (ISO or relative +Nd/+Nw), and a `todo` view (due/overdue follow-ups,
+next 10 upcoming, active deals untouched 14+ days). CLI grew `move` (with `--note`),
+`note`, `followup` (with `--clear`), `todo`.
+
+Verified: 55 tests pass; smoke run moved a deal, set follow-ups, `todo` shows due +
+upcoming correctly, invalid stage exits 1 with the stage list.

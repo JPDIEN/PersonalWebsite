@@ -8,7 +8,7 @@ Each milestone ends in a working, tested, committed state.
 - [x] **M2 — Thesis scoring** (est. 45m): `thesis.json` with weighted rules (sector
       keywords, stage, geography, keyword boosts/vetoes); `score` command writes fit
       scores with per-rule explanations; `list --top N`.
-- [ ] **M3 — Pipeline management** (est. 45m): stages (inbox → reviewing → meeting →
+- [x] **M3 — Pipeline management** (est. 45m): stages (inbox → reviewing → meeting →
       diligence → invested/passed), `move`, `note`, follow-up dates, `todo` command for
       overdue follow-ups.
 - [ ] **M4 — Weekly review report** (est. 30m): `report` command → markdown file: new
