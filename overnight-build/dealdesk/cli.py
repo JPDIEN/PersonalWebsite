@@ -3,10 +3,13 @@
 from __future__ import annotations
 
 import argparse
+import json
+import os
 import sys
 
 from . import db as dbmod
 from .ingest import ingest_csv
+from .scoring import TEMPLATE, ThesisError, load_thesis, score_all
 
 
 def _fmt_table(rows: list[dict], columns: list[tuple[str, str]]) -> str:
@@ -74,6 +77,79 @@ def cmd_list(args: argparse.Namespace) -> int:
     return 0
 
 
+def cmd_score(args: argparse.Namespace) -> int:
+    try:
+        thesis = load_thesis(args.thesis)
+    except FileNotFoundError:
+        print(f"error: no such thesis file: {args.thesis}\n"
+              f"hint: create one with: dealdesk init-thesis", file=sys.stderr)
+        return 1
+    except ThesisError as e:
+        print(f"error: {e}", file=sys.stderr)
+        return 1
+    conn = dbmod.connect(args.db)
+    n = score_all(conn, thesis)
+    conn.close()
+    print(f"scored {n} deal(s) against '{thesis.get('name', args.thesis)}'")
+    return 0
+
+
+def cmd_show(args: argparse.Namespace) -> int:
+    conn = dbmod.connect(args.db)
+    row = conn.execute("SELECT * FROM deals WHERE id = ?", (args.id,)).fetchone()
+    if not row:
+        conn.close()
+        print(f"error: no deal with id {args.id}", file=sys.stderr)
+        return 1
+    d = dbmod.deal_to_dict(row)
+    notes = conn.execute("SELECT * FROM notes WHERE deal_id = ? ORDER BY id",
+                         (args.id,)).fetchall()
+    conn.close()
+
+    print(f"#{d['id']}  {d['name']}  [{d['stage']}]")
+    for label, key in [("Domain", "domain"), ("Sector", "sector"), ("Round", "round"),
+                       ("Location", "location"), ("Founders", "founders"),
+                       ("Raising", "raise_amount"), ("Source", "source"),
+                       ("Follow-up", "follow_up")]:
+        if d.get(key):
+            print(f"  {label + ':':<12}{d[key]}")
+    if d.get("description"):
+        print(f"  {'About:':<12}{d['description']}")
+    if isinstance(d.get("extra"), dict) and d["extra"]:
+        for k, v in d["extra"].items():
+            print(f"  {k + ':':<12}{v}")
+
+    if d.get("score") is not None:
+        print(f"\n  Score: {d['score']:.1f} / 100")
+        detail = d.get("score_detail")
+        if isinstance(detail, dict):
+            if detail.get("veto"):
+                v = detail["veto"]
+                print(f"    VETO — {v['label']}: matched '{v['term']}' in {v['field']}")
+            for r in detail.get("rules", []):
+                mark = "+" if r["matched"] else " "
+                why = f" (matched '{r.get('term')}')" if r["matched"] else ""
+                print(f"    [{mark}] {r['label']:<28}{r['weight']:>3}{why}")
+    if notes:
+        print("\n  Notes:")
+        for n in notes:
+            print(f"    {n['created_at'][:10]}  {n['body']}")
+    return 0
+
+
+def cmd_init_thesis(args: argparse.Namespace) -> int:
+    path = args.path
+    if os.path.exists(path) and not args.force:
+        print(f"error: {path} already exists (use --force to overwrite)", file=sys.stderr)
+        return 1
+    with open(path, "w", encoding="utf-8") as fh:
+        json.dump(TEMPLATE, fh, indent=2)
+        fh.write("\n")
+    print(f"wrote template thesis to {path} — edit the rules, then run: "
+          f"dealdesk score --thesis {path}")
+    return 0
+
+
 def build_parser() -> argparse.ArgumentParser:
     p = argparse.ArgumentParser(
         prog="dealdesk",
@@ -98,6 +174,21 @@ def build_parser() -> argparse.ArgumentParser:
                                     f"({', '.join(dbmod.PIPELINE_STAGES)})")
     sp.add_argument("--top", type=int, metavar="N", help="show only the top N by score")
     sp.set_defaults(func=cmd_list)
+
+    sp = sub.add_parser("score", help="score all deals against a thesis file")
+    sp.add_argument("--thesis", default="thesis.json",
+                    help="path to thesis JSON (default: thesis.json)")
+    sp.set_defaults(func=cmd_score)
+
+    sp = sub.add_parser("show", help="show one deal in full, with score breakdown")
+    sp.add_argument("id", type=int, help="deal id (from 'list')")
+    sp.set_defaults(func=cmd_show)
+
+    sp = sub.add_parser("init-thesis", help="write a starter thesis.json to edit")
+    sp.add_argument("path", nargs="?", default="thesis.json",
+                    help="where to write it (default: thesis.json)")
+    sp.add_argument("--force", action="store_true", help="overwrite an existing file")
+    sp.set_defaults(func=cmd_init_thesis)
 
     return p
 

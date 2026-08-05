@@ -56,3 +56,14 @@ fill-only merge that never overwrites existing data, unmapped columns preserved 
 Verified: 27 unit tests pass (`python3 -m unittest discover -s tests`); manual smoke run
 ingested a 3-row CSV with a deliberate duplicate → "added 2, merged 1, skipped 0",
 `list` renders the table, missing-file path exits 1 with a clean message.
+
+## 2026-08-05 03:45 UTC — M2 complete: thesis scoring
+
+Built `scoring.py`: JSON thesis with weighted keyword rules + vetoes, word-boundary
+matching (so "ai" won't match "chain"), score = matched weight as % of total, full
+per-rule explanation persisted as JSON. CLI grew `score`, `show` (deal detail with score
+breakdown), and `init-thesis` (starter template). Thesis files are validated with
+human-readable errors.
+
+Verified: 41 tests pass; smoke run scored the demo DB (Fastline 45.0 via stage+geo
+matches, Loamly 25.0), `list --top` ranks by score, `show 2` prints the breakdown.
