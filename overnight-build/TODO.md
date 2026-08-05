@@ -11,7 +11,7 @@ Each milestone ends in a working, tested, committed state.
 - [x] **M3 — Pipeline management** (est. 45m): stages (inbox → reviewing → meeting →
       diligence → invested/passed), `move`, `note`, follow-up dates, `todo` command for
       overdue follow-ups.
-- [ ] **M4 — Weekly review report** (est. 30m): `report` command → markdown file: new
+- [x] **M4 — Weekly review report** (est. 30m): `report` command → markdown file: new
       this week, top-scored inbox, stage changes, stale deals, pass log.
 - [ ] **M5 — Local web dashboard** (est. 60m): `serve` command → stdlib http.server
       dashboard: pipeline board, sortable deal table, score breakdown per deal, stage

@@ -77,3 +77,12 @@ next 10 upcoming, active deals untouched 14+ days). CLI grew `move` (with `--not
 
 Verified: 55 tests pass; smoke run moved a deal, set follow-ups, `todo` shows due +
 upcoming correctly, invalid stage exits 1 with the stage list.
+
+## 2026-08-05 04:15 UTC — M4 complete: weekly review report
+
+Built `report.py` → markdown with pipeline snapshot, new-this-period (score-sorted), top
+of inbox, stage changes, needs-attention (due + stale), and passed-this-period. CLI
+`report --days N [-o FILE]`.
+
+Verified: 61 tests pass; smoke report over the demo DB renders every section with
+correct counts and the overdue follow-up surfaced under Needs attention.

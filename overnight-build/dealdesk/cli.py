@@ -10,6 +10,7 @@ import sys
 from . import db as dbmod
 from .ingest import ingest_csv
 from .pipeline import PipelineError, add_note, move, set_followup, todo
+from .report import generate_report
 from .scoring import TEMPLATE, ThesisError, load_thesis, score_all
 
 
@@ -206,6 +207,19 @@ def cmd_todo(args: argparse.Namespace) -> int:
     return 0
 
 
+def cmd_report(args: argparse.Namespace) -> int:
+    conn = dbmod.connect(args.db)
+    md = generate_report(conn, days=args.days)
+    conn.close()
+    if args.output:
+        with open(args.output, "w", encoding="utf-8") as fh:
+            fh.write(md + "\n")
+        print(f"wrote report to {args.output}")
+    else:
+        print(md)
+    return 0
+
+
 def cmd_init_thesis(args: argparse.Namespace) -> int:
     path = args.path
     if os.path.exists(path) and not args.force:
@@ -272,6 +286,13 @@ def build_parser() -> argparse.ArgumentParser:
 
     sp = sub.add_parser("todo", help="what needs attention: due follow-ups, stale deals")
     sp.set_defaults(func=cmd_todo)
+
+    sp = sub.add_parser("report", help="generate a markdown weekly-review report")
+    sp.add_argument("--days", type=int, default=7, metavar="N",
+                    help="lookback window in days (default: 7)")
+    sp.add_argument("-o", "--output", metavar="FILE",
+                    help="write to a file instead of stdout")
+    sp.set_defaults(func=cmd_report)
 
     sp = sub.add_parser("init-thesis", help="write a starter thesis.json to edit")
     sp.add_argument("path", nargs="?", default="thesis.json",
