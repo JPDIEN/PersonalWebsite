@@ -31,8 +31,10 @@ export function Navigation() {
       <aside
         className="hidden md:flex fixed top-0 left-0 bottom-0 w-48 z-50 flex-col py-10 px-5"
         style={{
-          background: "hsl(var(--sidebar))",
-          borderRight: "1px solid hsl(var(--sidebar-border))",
+          background: "hsl(var(--sidebar) / 0.62)",
+          backdropFilter: "blur(16px)",
+          WebkitBackdropFilter: "blur(16px)",
+          borderRight: "1px solid hsl(var(--sidebar-border) / 0.5)",
         }}
       >
         <Link
@@ -113,16 +115,16 @@ export function Navigation() {
       <header
         className="md:hidden fixed top-0 left-0 right-0 z-50 transition-all duration-500"
         style={{
-          background: transparent ? "transparent" : "rgba(255,255,255,0.85)",
+          background: transparent ? "transparent" : "hsl(var(--background) / 0.82)",
           backdropFilter: transparent ? "none" : "blur(12px)",
-          borderBottom: transparent ? "none" : "1px solid rgba(0,0,0,0.06)",
+          borderBottom: transparent ? "none" : "1px solid hsl(var(--border) / 0.5)",
         }}
       >
         <div className="flex items-center justify-between px-6 h-14">
           <Link
             href="/"
             className="font-serif font-semibold text-lg tracking-wide transition-colors"
-            style={{ color: transparent ? "rgba(255,255,255,0.9)" : "inherit" }}
+            style={{ color: transparent ? "hsl(var(--foreground) / 0.9)" : "inherit" }}
             data-testid="link-home"
           >
             JD
@@ -131,7 +133,7 @@ export function Navigation() {
           <button
             onClick={() => setOpen(true)}
             className="transition-opacity hover:opacity-60"
-            style={{ color: transparent ? "rgba(255,255,255,0.8)" : "inherit" }}
+            style={{ color: transparent ? "hsl(var(--foreground) / 0.8)" : "inherit" }}
             aria-label="Open menu"
             data-testid="button-mobile-menu"
           >
