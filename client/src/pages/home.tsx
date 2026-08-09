@@ -7,10 +7,10 @@ const WORD_EASE: [number, number, number, number] = [0.25, 0.1, 0.25, 1];
 const LONG_VERSION_URL =
   "https://outofdistributionthinking.substack.com/p/for-the-ones-who-saw-me-first";
 
-// TODO(joseph): public share link for the running curiosity doc.
-// Set sharing to "anyone with the link → viewer" first, then paste it here —
-// until then the phrase renders as plain text instead of a dead link.
-const CURIOSITY_DOC_URL = "";
+// Shared as "anyone with the link → viewer"; if that ever changes,
+// set this back to "" and the phrase falls back to plain text.
+const CURIOSITY_DOC_URL =
+  "https://docs.google.com/document/d/1HUfrHBi7eUv-_2VVWisEXElHmpSLWcq_kNLXWT8FijA/edit?usp=sharing";
 
 type BioLink = { text: string; href: string; external?: boolean };
 type BioSegment = string | BioLink;
