@@ -12,6 +12,7 @@ import Home from "@/pages/home";
 import About from "@/pages/about";
 import Experience from "@/pages/experience";
 import Journal from "@/pages/journal";
+import Memos from "@/pages/memos";
 import Contact from "@/pages/contact";
 import Now from "@/pages/now";
 import NotFound from "@/pages/not-found";
@@ -37,6 +38,7 @@ function Router() {
           <Route path="/about" component={About} />
           <Route path="/experience" component={Experience} />
           <Route path="/journal" component={Journal} />
+          <Route path="/memos" component={Memos} />
           <Route path="/contact" component={Contact} />
           <Route path="/now" component={Now} />
           <Route component={NotFound} />
